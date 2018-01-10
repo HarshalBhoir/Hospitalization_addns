@@ -1,0 +1,17 @@
+<openerp>
+    <data>
+     <record id="demo_logapproval_template" model="mail.template">
+            <field name="name">Logistic Approval</field>
+            <field name="email_from"></field>
+            <field name="model_id" ref="model_crm_indent"/>
+            <field name="subject">Approval For Demo Indent</field>
+            <!--<field name="email_to" >${object.user_id.partner_id.manager_id.email}</field>-->
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+                    <h3><b>Hello,</b></h3><br/>
+                    Kindly find below document for your kind persual and approval please.<br/><br/>
+                    For any further information please <a href="${object.url}">Click here<a/><br/>
+            ]]></field>
+        </record>
+    </data>
+</openerp>

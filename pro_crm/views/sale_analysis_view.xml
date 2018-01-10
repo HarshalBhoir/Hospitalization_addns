@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+<data>
+
+<!-- Sale Analysis Form View -->    
+<record id="sale_analysis_form" model="ir.ui.view">
+    <field name="name">view.sale_analysis.form</field>
+    <field name="model">sale.analysis</field>
+    <field name="arch" type="xml">
+        <form string="Sale Analysis">
+			<header>
+			<field name="state" widget="statusbar" readonly="1" statusbar_visible="draft,product"/>
+			</header>
+            <sheet>
+			<div class="oe_button_box" name="button_box">
+				<button name="view_report" type="object" class="oe_stat_button" icon="fa-files-o" string="View Report">
+				</button>
+			</div>
+            <h1><center>Target Vs Achievement</center></h1><br/>
+            <group col="4" colspan="2">
+                <field name="target" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+				<field name="zone" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+				<group col="4" colspan="2">
+					<label for="start_date" string="Date"/>
+					<div><field name="start_date" class="oe_inline" attrs="{'readonly':[('state','not in',['draft'])]}"/> To <field name="end_date" class="oe_inline" attrs="{'readonly':[('state','not in',['draft'])]}"/></div>
+				</group>
+				<field name="zsm" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+            </group>
+			<button name="load_product" string="Load" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+			<button name="calculate_achievement" string="Calculate" type="object" class="oe_highlight" style="margin-left: 18px;" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+			<group string="Target Vs Achievement - Product">
+			<field name="sale_analysis_product_one2many" nolabel="1">
+				<tree editable="bottom">
+					<field name="product_id" domain="[('can_be_expensed','=',False)]" required = "1"/>
+					<field name="product_categ_id" invisible="1"/>
+					<field name="target"/>
+					<field name="achieved" readonly="1"/>
+					<field name="balance" readonly="1"/>
+					<field name="percentage" readonly="1"/>
+				</tree>
+			</field>
+			</group>
+			
+			<group string="Target Vs Achievement - Product Category">
+			<field name="product_category_one2many" nolabel="1" readonly="1">
+				<tree editable="bottom">
+					<field name="categ_id"/>
+					<field name="target"/>
+					<field name="achieved"/>
+					<field name="balance"/>
+					<field name="percentage"/>
+				</tree>
+			</field>
+			</group>
+			</sheet>
+        </form>
+    </field>
+</record>
+
+<record model="ir.ui.view"  id="sale_analysis_form_extension">
+    <field name="name">view.sale_analysis.form</field>
+    <field name="model">sale.analysis</field>
+    <field name="inherit_id" ref="pro_crm.sale_analysis_form"/>
+    <field name="groups_id" eval="[(6, 0, [ref('pro_crm.group_pro_crm_zsm') ])]"/>
+    <field name="arch" type="xml">
+        <field name="sale_analysis_product_one2many" position="attributes">
+            <attribute name="readonly">1</attribute>
+        </field>
+    </field>
+</record>
+
+<!-- Sale Analysis Tree View -->
+<record id="sale_analysis_tree" model="ir.ui.view">
+    <field name="name">view.sale_analysis.tree</field>
+    <field name="model">sale.analysis</field>
+    <field name="priority">1</field>
+    <field name="arch" type="xml">
+        <tree string="Target Vs Achievement">
+			<field name="zone"/>
+			<field name="target"/>
+            <field name="start_date"/>
+            <field name="end_date"/>
+        </tree>
+    </field>
+</record>
+
+<record id="action_sale_analysis_form" model="ir.actions.act_window">
+    <field name="name">Target Vs Achievement</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">sale.analysis</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+
+<record id="sale_analysis_report_form" model="ir.ui.view">
+    <field name="name">view.sale_analysis.report.form</field>
+    <field name="model">sale.analysis.report</field>
+    <field name="arch" type="xml">
+        <form string="Sale Analysis Report" create="0" edit="0" delete="0">
+			<group col="4" colspan="2">
+				<field name="name" readonly="1"/>
+			</group>
+			<field name="report" invisible="1"/>
+			<field name="report_display" readonly="0"/>
+        </form>
+    </field>
+</record>
+
+<!-- <record id="sale_analysis_zone" model="ir.ui.view">
+    <field name="name">view.sale.analysis.zone.form</field>
+    <field name="model">sale.analysis.zone</field>
+    <field name="arch" type="xml">
+        <form string="Sale Analysis Report">
+			<group col="4" colspan="2">
+				<field name="start_date"/>
+                <field name="end_date"/>
+			</group>
+			<field name="sale_analysis_one2many" nolabel="1">
+				<tree editable="bottom">
+					<field name="zone"/>
+					<field name="zsm"/>
+				</tree>
+			</field>
+        </form>
+    </field>
+</record> -->
+
+<record id="sale_analysis_report_tree" model="ir.ui.view">
+    <field name="name">view.sale_analysis_report.tree</field>
+    <field name="model">sale.analysis.report</field>
+    <field name="priority">1</field>
+    <field name="arch" type="xml">
+        <tree string="Sale Analysis Report">
+			<field name="name"/>
+			<field name="report_display"/>
+        </tree>
+    </field>
+</record>
+
+<record id="action_sale_analysis_report" model="ir.actions.act_window">
+    <field name="name">Target Vs Achievement Report</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">sale.analysis.report</field>
+	<field name="view_id" ref="sale_analysis_report_form"/>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+</record>
+
+</data>
+</openerp>

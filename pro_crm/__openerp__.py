@@ -1,0 +1,57 @@
+#
+# Pro CRM
+#
+{
+	'name': 'Pro CRM',
+	'version': '1.0',
+	'author': 'MSP1 Managed IT Services Pvt Ltd.',
+	'sequence': 1,
+	'category': 'CRM',
+	'description': """
+# Medical Equipment module
+""",
+	'depends': [
+		'base',
+		'sale',
+		'crm',
+		'board',
+		'sale_crm',
+		'purchase',
+		'stock',
+		'sale_stock',
+		'hr_expense',
+		'hr_contract'
+	],
+	'data': [
+		'security/pro_crm_security.xml',
+		'security/ir.model.access.csv',
+		'wizard/demo_cancelled_view.xml',
+		'wizard/crm_lead_lost_view.xml',
+		'views/dealer_info_view.xml',
+		'views/pro_crm_login_view.xml',
+		'views/crm_configuration_view.xml',
+		'views/crm_lead_view.xml',
+		'views/indent_form_view.xml',
+		'views/sale_order_extension_view.xml',
+		'views/account_invoice_extension_view.xml',
+		'views/crm_product_view.xml',
+		'views/hr_employee_extension_view.xml',
+		'views/hr_expense_extension_view.xml',
+		'views/documents_view.xml',
+		'views/sale_analysis_view.xml',
+		'views/crm_sequence.xml',
+		'views/pro_crm_dashboard.xml',
+		'views/demo_logapproval_template.xml',
+		'views/demo_zsmapproval_template.xml',
+		'views/demo_ceoapproval_template.xml',
+		'views/log_dispatch_notification_template.xml',
+		'views/log_dispatch_notification_cron.xml',
+		'views/sale_order_confirm_notification_template.xml',
+		'views/due_date_reminder_notification_template.xml',
+		'views/due_date_reminder_notification_cron.xml',
+		'views/pro_crm_menus.xml',
+		'views/sale_indent_report.xml',
+	],
+	'installable' : True,
+	'application' : True,
+}

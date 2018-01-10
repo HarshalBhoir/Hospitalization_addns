@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<odoo>
+
+<record id="account_invoice_extension_form" model="ir.ui.view">
+	<field name="name">account.invoice.form</field>
+	<field name="model">account.invoice</field>
+	<field name="inherit_id" ref="account.invoice_form"/>
+    <field name="arch" type="xml">
+        <field name="team_id" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</field>
+		<field name="date_due" position="replace">
+			<field name="date_due" string="Payment Due Date"/>
+		</field>
+		<field name="team_id" position="after">
+			<field name="carrier_id" readonly="1"/>
+			<field name="delivery_price" readonly="1"/>
+		</field>
+		<field name="amount_tax" position="after">
+			<field name="amount_delivery"/>
+		</field>
+    </field>
+</record>
+
+<record id="account_invoice_extension_tree" model="ir.ui.view">
+	<field name="name">account.invoice.tree</field>
+	<field name="model">account.invoice</field>
+	<field name="inherit_id" ref="account.invoice_tree"/>
+    <field name="arch" type="xml">
+		<xpath expr="//tree" position="replace">
+			<tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Invoice">
+				<field name="create_date" string="Date"/>
+				<field name="user_id"/>
+				<field name="origin"/>
+				<field name="partner_id" groups="base.group_user" string="Customer"/>
+				<field name="number"/>
+				<field name="date_invoice"/>
+				<field name="amount_total_signed" sum="Total"/>
+				<field name="date_due" string="Payment Due Date"/>
+				<field name="residual_signed"/>
+				<field name="state"/>
+				<field name="commercial_partner_id" invisible="1"/>
+				<field name="reference" invisible="1"/>
+				<field name="name" invisible="1"/>
+				<field name="journal_id" invisible="1"/>
+				<field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+				<field name="currency_id" invisible="1"/>
+				<field name="company_currency_id" invisible="1"/>
+				<field name="type" invisible="context.get('type',True)"/>
+			</tree>
+		</xpath>
+	</field>
+</record>
+
+<record id="view_account_invoice_filter_extension" model="ir.ui.view">
+	<field name="name">view.account_invoice_filter.extension</field>
+	<field name="model">account.invoice</field>
+	<field name="inherit_id" ref="account.view_account_invoice_filter"/>
+	<field name="arch" type="xml">
+		<xpath expr="//filter[@name='late']" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+	</field>
+</record>
+
+
+</odoo>

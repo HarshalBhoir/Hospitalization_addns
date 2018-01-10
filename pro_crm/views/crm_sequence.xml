@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    
+<record id="seq_customer_code" model="ir.sequence">
+	<field name="name">Customer Code</field>
+	<field name="code">crm.customer</field>
+	<field name="prefix"></field>
+	<field name="padding">5</field>
+	<field name="implementation">no_gap</field>
+</record>
+
+<record id="seq_enquiry_no" model="ir.sequence">
+	<field name="name">Enquiry No</field>
+	<field name="code">crm.enquiry</field>
+	<field name="prefix"></field>
+	<field name="padding">4</field>
+	<field name="implementation">no_gap</field>
+</record>
+
+<record id="seq_indent_no_demo" model="ir.sequence">
+	<field name="name">Indent No Demo</field>
+	<field name="code">demo.indent</field>
+	<field name="prefix"></field>
+	<field name="padding">4</field>
+	<field name="implementation">no_gap</field>
+</record>
+
+<record id="seq_indent_no_sale" model="ir.sequence">
+	<field name="name">Indent No Sale</field>
+	<field name="code">sale.indent</field>
+	<field name="prefix"></field>
+	<field name="padding">4</field>
+	<field name="implementation">no_gap</field>
+</record>
+
+<record id="seq_indent_no_dealer" model="ir.sequence">
+	<field name="name">Indent No Dealer</field>
+	<field name="code">dealer.indent</field>
+	<field name="prefix">IN/DEALER/</field>
+	<field name="padding">4</field>
+	<field name="implementation">no_gap</field>
+</record>
+
+<record id="seq_indent_no_direct" model="ir.sequence">
+	<field name="name">Indent No Direct</field>
+	<field name="code">direct.indent</field>
+	<field name="prefix">IN/DIRECT/</field>
+	<field name="padding">4</field>
+	<field name="implementation">no_gap</field>
+</record>
+
+<record id="seq_indent_no_tender" model="ir.sequence">
+	<field name="name">Indent No Tender</field>
+	<field name="code">tender.indent</field>
+	<field name="prefix">IN/TENDER/</field>
+	<field name="padding">4</field>
+	<field name="implementation">no_gap</field>
+</record>
+
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+     <record id="sale_order_confirm_template" model="mail.template">
+            <field name="name">Sale Order Confirm</field>
+            <field name="email_from"></field>
+            <field name="model_id" ref="model_sale_order"/>
+            <field name="subject">Reminder for ${object.name}</field>
+            <field name="email_to" >${object.user_id.partner_id.email}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+                    <h3><b>Hello,</b></h3><br/>
+                    This email is to notify you that sale order - ${object.name} is confirmed.<br/><br/>
+            ]]></field>
+        </record>
+    </data>
+</openerp>

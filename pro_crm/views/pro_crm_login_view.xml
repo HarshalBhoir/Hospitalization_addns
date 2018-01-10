@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+<template id="matrix_login_assets" name="Matrix login" inherit_id="web.assets_backend">
+	<xpath expr="." position="inside">
+		<!--<link rel="stylesheet" href="/pro_crm/static/src/css/style.css"/>-->
+		<!--<link rel="stylesheet" href="/pro_crm/static/src/less/style.less"/>-->
+	</xpath>
+</template>
+
+<template id="matrix_login_logo" name="matrix login_screen_logo" inherit_id="web.login_layout">
+	<xpath expr="//img" position="replace">
+		<div style="margin-bottom: 13px;">
+			<!--<img src="/pro_crm/static/src/img/matrix-logo-footer.png"/>-->
+		</div>
+	</xpath>
+</template>
+
+<template id="matrix_login" name="matrix login_screen" inherit_id="web.login">
+	<xpath expr="." position="inside">
+		<style>
+@font-face {
+	font-family:"Helvetica Neue";
+	src:url("/pro_crm/static/src/font/Helvetica/Helvetica.ttf");
+}
+body {
+	background-image: URL("/pro_crm/static/description/Coffs Harbour Hospital 09.jpg");
+	background-repeat: no-repeat;
+	background-position: top;
+	background-size: 100%;
+	width: 100% !important;
+	font-family: "Helvetica Neue", Helvetica, sans-serif, "Lato", "Roboto", Arial;
+}
+body &gt; .row {
+	margin-top: 40px;
+}
+.o_database_list {
+	float: right;
+	max-width: 400px;
+	padding-top: 85px;
+	margin-right: 4%;
+}
+.login_title {
+	position: absolute;
+	top: 22px;
+	color: #FFFFFF;
+	margin-top: 40px;
+	margin-left: 17px;
+	font-family: "Helvetica Neue", Helvetica, sans-serif, "Lato", "Roboto", Arial;
+}
+.login_footer{
+	top: 20px;
+	position: absolute;
+	left: -10px;
+	font-size: 1.4em;
+	font-family: "Helvetica Neue", Helvetica, sans-serif, "Lato", "Roboto", Arial;
+}
+.login_footer li{
+	list-style:none;
+}
+.login_footer_right{
+	top: 15px;
+	position: absolute;
+	right: -10px;
+	font-size: 1.2em;
+	font-family: "Helvetica Neue", Helvetica, sans-serif, "Lato", "Roboto", Arial;
+margin-right: 5%;
+}
+.login_footer_right li{
+	list-style:none;
+}
+.main_login_footer {
+	bottom: 0;
+	position: absolute;
+	height: 140px;
+	width: 100%;
+	padding: 0px;
+	background-color: white;
+	margin-left: -15px;
+}
+		</style>
+		<!--<div class="login_title col-xs-4">
+			<img src="/amgt_rental/static/description/RentalProLogo.png" width="80%"/>
+		   <h2><b>Equipment Rental Software for professionals</b></h2>
+		</div>-->
+		<div class="main_login_footer col-xs-11">
+			<div class="col-xs-6 login_footer">
+				<b><ul>
+					<li style="color: #337ab7">AquaGiraffe Technologies LLC</li>
+					<li style="color: #337ab7">Santa Clara | Dubai | Mumbai</li>
+					<li><a style="color: #337ab7" href="http://www.aqua-giraffe.com">www.aqua-giraffe.com</a></li>
+				</ul></b>
+			</div>
+			<div class="col-xs-6 login_footer_right">
+				<b>
+				<ul style="float: right;">
+					<img src="/pro_crm/static/src/img/matrix-logo-footer.png"/>
+				</ul> 
+				</b>
+			</div>
+		</div>
+	</xpath>
+	<xpath expr="//form/div/label[@for='login']" position="replace">
+	</xpath>
+	<xpath expr="//form/div/input[@name='login']" position="attributes">
+		<attribute name="placeholder">Username</attribute>
+	</xpath>
+	<xpath expr="//form/div/label[@for='password']" position="replace">
+	</xpath>
+	<xpath expr="//form/div/input[@name='password']" position="attributes">
+		<attribute name="placeholder">Password</attribute>
+	</xpath>
+	<xpath expr="//form/div/button[@type='submit']" position="attributes">
+		<attribute name="style">float: right;</attribute>
+	</xpath>
+</template>
+
+</odoo>

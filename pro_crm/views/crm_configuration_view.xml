@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+<data>
+
+
+
+<record id="email_template_opportunity_reminder_mail" model="mail.template">
+		<field name="name">Reminder to User</field>
+		<field name="model_id" ref="crm.model_crm_lead"/>
+		<field name="auto_delete" eval="True"/>
+		<field name="email_from">matrix201704@gmail.com</field>
+		<field name="email_to">${(object.user_id != False and object.user_id.email)|safe}</field>
+		<field name="subject">Reminder on Lead: ${object.name} from ${object.partner_id != False and object.partner_id.name or object.contact_name}</field>
+		<field name="body_html"><![CDATA[<p>This opportunity did not have any activity since at least 15 days. Here are some details:</p>
+<ul>
+<li>Name: ${object.name}</li>
+<li>Enquiry No.: ${object.enquiry_no}</li>
+</ul>]]></field>
+</record>
+
+<record id="action_email_reminder_lead" model="ir.actions.server">
+	<field name="name">Reminder to User</field>
+	<field name="model_id" ref="model_crm_lead"/>
+	<field name="condition">True</field>
+	<field name="type">ir.actions.server</field>
+	<field name="state">email</field>
+	<field name="template_id" ref="pro_crm.email_template_opportunity_reminder_mail"/>
+</record>
+
+<record id="rule_set_reminder_lead" model="base.action.rule">
+	<field name="name">Set Auto Reminder on leads which are not open since 5 days.</field>
+	<field name="model_id" ref="model_crm_lead"/>
+	<field name="sequence">1</field>
+	<field name="kind">on_time</field>
+	<field name="filter_domain">[('stage_id.sequence', '=', 1)]</field>
+	<field name="trg_date_id" ref="crm.field_crm_lead_create_date"/>
+	<field name="trg_date_range">5</field>
+	<field name="trg_date_range_type">day</field>
+	<field name="server_action_ids" eval="[(6,0,[ref('action_email_reminder_lead')])]"/>
+</record>
+
+<!-- Zone Form View -->     
+<record id="view_crm_configuration" model="ir.ui.view">
+    <field name="name">crm.configuration.form</field>
+    <field name="model">crm.configuration</field>
+    <field name="arch" type="xml">
+        <form string="Configuration">
+            <group string="Zonal Sales Manager">
+                <field name="name" required="1"/>
+                <field name="zone_code" required="1"/>
+                <field name="zonal_sales_manager"/>
+            </group>
+        </form>
+    </field>
+</record>
+        
+<record id="action_zone_configuration" model="ir.actions.act_window">
+	<field name="name">Zone</field>
+	<field name="type">ir.actions.act_window</field>
+	<field name="res_model">crm.configuration</field>
+	<field name="view_type">form</field>
+	<field name="view_mode">tree,form</field>
+</record>
+
+<record id="action_delivery_term" model="ir.actions.act_window">
+	<field name="name">Delivery Term</field>
+	<field name="type">ir.actions.act_window</field>
+	<field name="res_model">delivery.term</field>
+	<field name="view_type">form</field>
+	<field name="view_mode">tree,form</field>
+</record>
+
+<record id="res_company_form_extension" model="ir.ui.view">
+	<field name="name">res.company.form</field>
+	<field name="model">res.company</field>
+	<field name="inherit_id" ref="base.view_company_form"/>
+    <field name="arch" type="xml">
+		<xpath expr='//form' position='attributes'>
+			<attribute name="create">0</attribute>
+		</xpath>
+	</field>
+</record>
+
+<record id="res_company_tree_extension" model="ir.ui.view">
+	<field name="name">res.company.tree</field>
+	<field name="model">res.company</field>
+	<field name="inherit_id" ref="base.view_company_tree"/>
+    <field name="arch" type="xml">
+		<xpath expr='//tree' position='attributes'>
+			<attribute name="create">0</attribute>
+		</xpath>
+	</field>
+</record>
+
+
+<template id="report.external_layout_header">
+	<div class="header">
+		<div class="row">
+			<div class="col-xs-3 text-left">
+				<img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo"
+					style="max-height: 70px;" />
+			</div>
+			<div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.rml_header1"/>
+		</div>
+		<div class="row zero_min_height">
+			<div class="col-xs-12">
+				<div style="border-bottom: 1px solid black;"></div>
+			</div>
+		</div>
+		<div class="row">
+			<!--<div class="col-xs-3" name="company_address">
+				<div t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: true}" style="border-bottom: 1px solid black;"/>
+			</div>-->
+			<div class="col-xs-3" name="company_address">
+				<div style="border-bottom: 1px solid black;">
+					<t t-if="company.name"><span t-field="company.name"/></t><br/>
+					<t t-if="company.street"><span t-field="company.street"/></t>
+					<t t-if="company.street2"><span t-field="company.street2"/></t>
+					<t t-if="company.city"><span t-field="company.city"/> <span t-field="company.zip"/></t>
+					<t t-if="company.state_id"><span t-field="company.state_id.name"/>, <span t-field="company.country_id.name"/></t>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template id="external_layout_footer" inherit_id="report.external_layout_footer">
+	<xpath expr="//li[@t-if='company.website']" position="after">
+		<li>Product Range: - Cautery - Saline TUR - Vessel Sealer - LED OT Light - Light source </li>
+	</xpath>
+</template>
+
+<template id="external_layout_crm_address" inherit_id="sale.report_saleorder_document">
+	<!--<xpath expr="//div[@class='col-xs-6']" position="attributes">-->
+	<!--	<attribute name="style">padding-top: 20px</attribute>-->
+	<!--</xpath>-->
+	<!--<xpath expr="//div[@class='col-xs-6']/strong[1]" position="replace">-->
+	<!--	<strong t-if="doc.partner_shipping_id == doc.partner_invoice_id">To:</strong>-->
+	<!--	<t t-if="doc.hospital_name">-->
+	<!--		<p t-field="doc.hospital_name"/>-->
+	<!--	</t>-->
+	<!--</xpath>-->
+	<xpath expr="//div[@class='col-xs-5 col-xs-offset-1']" position="replace"></xpath>
+	
+	<xpath expr="//div[@class='col-xs-6']" position="replace">
+		<div class="col-xs-6" style="padding-top: 10px">
+			<strong t-if="doc.partner_shipping_id == doc.partner_invoice_id">To:</strong>
+			<strong t-if="doc.partner_shipping_id != doc.partner_invoice_id">To:</strong>
+			<div t-if="doc.partner_id">
+				<t t-if="doc.partner_id.hosp_name"><span t-field="doc.partner_id.hosp_name"/>.<br/></t>
+				<t t-if="doc.partner_id.street"><span t-field="doc.partner_id.street"/>,<br/></t>
+				<t t-if="doc.partner_id.street2"><span t-field="doc.partner_id.street2"/><br/></t>
+				<t t-if="doc.partner_id.city"><span t-field="doc.partner_id.city"/> - <span t-field="doc.partner_id.zip"/><br/></t>
+				<t t-if="doc.partner_id.state_id"><span t-field="doc.partner_id.state_id.name"/>,</t>
+				<t t-if="doc.partner_id.country_id"><span t-field="doc.partner_id.country_id.name"/><br/></t>
+				<t t-if="doc.partner_id.mobile"><span t-field="doc.partner_id.mobile"/></t><br/>
+			</div>
+		</div>
+	</xpath>
+	
+	<xpath expr="//div[@name='total']" position="replace">
+		<div class="row" name="total">
+			<div class="col-xs-6 pull-right">
+			    <table class="table table-condensed">
+				<tr class="border-black">
+				    <td><strong>Total Without Taxes</strong></td>
+				    <td class="text-right">
+					<span t-field="doc.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.pricelist_id.currency_id&quot;}"/>
+				    </td>
+				</tr>
+				<tr>
+				    <td>Taxes</td>
+				    <td class="text-right">
+					<span t-field="doc.amount_tax" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.pricelist_id.currency_id&quot;}"/>
+				    </td>
+				</tr>
+				<tr>
+				    <td>Transportation &amp; Installation Charges</td>
+				    <td class="text-right">
+					<span t-field="doc.amount_delivery" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.pricelist_id.currency_id&quot;}"/>
+				    </td>
+				</tr>
+				<tr class="border-black">
+				    <td><strong>Total</strong></td>
+				    <td class="text-right">
+					<span t-field="doc.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;doc.pricelist_id.currency_id&quot;}"/>
+				    </td>
+				</tr>
+			    </table>
+			</div>
+		</div>
+	</xpath>
+	
+	<xpath expr="//table" position="attributes">
+		<attribute name="style">border: 1px solid black;</attribute>
+	</xpath>
+	<xpath expr="//p[@t-field='doc.note']" position="replace">
+		<p t-field="doc.note" style="font-weight: bold;"/>
+	</xpath>
+	<xpath expr="//p[@t-field='doc.note']" position="before">
+		<p t-if="doc.c_form == 'yes'">
+			<strong>C Form is Applicable</strong>
+		</p>
+	</xpath>
+	<xpath expr="//div[@t-if='doc.date_order']" position="replace">
+		<div t-if="doc.date_order" class="col-xs-3">
+			<strong t-if="doc.state not in ['draft','sent']">Date Ordered:</strong>
+			<strong t-if="doc.state in ['draft','sent']">Quotation Date:</strong>
+			<p t-esc="time.strftime('%d/%m/%Y', time.strptime(doc.date_order,'%Y-%m-%d %H:%M:%S'))"/>
+		</div>
+	</xpath>
+	<xpath expr="//div[@class='row']" position="after">
+		<br/><br/>
+		<p><b>Dear Sir/Madam,</b><br/>
+		<span style="margin-left : 50px">Thank you for the enquiry and we are pleased to quote for the same as follows:-</span>
+		</p>
+	</xpath>
+	
+</template>
+
+<!--<template id="external_layout_picking_op_address" inherit_id="stock.report_picking">
+	<xpath expr="//div[@class='col-xs-6']" position="attributes">
+		<attribute name="style">padding-top: 60px</attribute>
+	</xpath>
+</template>
+
+<template id="external_layout_delivery_slip_address" inherit_id="stock.report_delivery_document">
+	<xpath expr="//div[@class='col-xs-6']" position="attributes">
+		<attribute name="style">padding-top: 70px</attribute>
+	</xpath>
+</template>-->
+
+<template id="external_layout_invoice_address" inherit_id="account.report_invoice_document">
+	<xpath expr="//div[@class='row']" position="attributes">
+		<attribute name="style">padding-bottom: 40px</attribute>
+	</xpath>
+	<xpath expr="//div[@class='col-xs-5 col-xs-offset-7']" position="attributes">
+		<attribute name="style">padding-top: 40px; margin-left: 0px;</attribute>
+	</xpath>
+	<xpath expr="//table" position="attributes">
+		<attribute name="style">border: 1px solid black;</attribute>
+	</xpath>
+	<xpath expr="//div[@class='col-xs-5 col-xs-offset-7']/address" position="before">
+		<strong>To:</strong>
+	</xpath>
+	<xpath expr="//div[@class='col-xs-4 pull-right']" position="replace">
+		<div class="col-xs-6 pull-right">
+                    <table class="table table-condensed">
+                        <tr class="border-black">
+                            <td><strong>Subtotal</strong></td>
+                            <td class="text-right">
+                                <span t-field="o.amount_untaxed" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                            </td>
+                        </tr>
+                        <t t-foreach="o._get_tax_amount_by_group()" t-as="amount_by_group">
+                            <tr>
+                                <td><span t-esc="amount_by_group[0]"/></td>
+                                <td class="text-right">
+                                    <span t-esc="amount_by_group[1]"/>
+                                </td>
+                            </tr>
+                        </t>
+			<tr>
+                            <td>Transportation &amp; Installation Charges</td>
+                            <td class="text-right">
+                                <span t-field="o.amount_delivery" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                            </td>
+                        </tr>
+                        <tr class="border-black">
+                            <td><strong>Total</strong></td>
+                            <td class="text-right">
+                                 <span t-field="o.amount_total" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>	
+	</xpath>
+</template>
+
+<record id="mail.mail_template_data_notification_email_default" model="mail.template">
+	<field name="body_html"><![CDATA[
+	<div itemscope itemtype="http://schema.org/EmailMessage">
+		<div itemprop="potentialAction" itemscope itemtype="http://schema.org/ViewAction">
+			% if ctx.get('button_access'):
+			<link itemprop="target" href="${ctx['button_access']['url']}"/>
+			<link itemprop="url" href="${ctx['button_access']['url']}"/>
+			% endif
+			<meta itemprop="name" content="View ${ctx['model_name']}"/>
+		</div>
+	</div>
+	<div summary="o_mail_notification" style="padding:0px; width:600px; margin:0 auto; background: #FFFFFF repeat top /100%; color:#777777">
+		<table cellspacing="0" cellpadding="0" style="width:600px; border-collapse:collapse; background:inherit; color:inherit">
+			<tbody><tr>
+				<td valign="center" width="270" style="padding:5px 10px 5px 5px;font-size: 30px">
+					% if ctx.get('button_access'):
+					<a href="${ctx['button_access']['url']}" style="-webkit-user-select: none; padding: 5px 10px; font-size: 12px; line-height: 18px; color: #FFFFFF; border-color:#a24689; text-decoration: none; display: inline-block; margin-bottom: 0px; font-weight: 400; text-align: center; vertical-align: middle; cursor: pointer; white-space: nowrap; background-image: none; background-color: #a24689; border: 1px solid #a24689; border-radius:3px" class="o_default_snippet_text">${ctx['button_access']['title']}</a>
+					% endif
+	
+					% if ctx.get('button_follow'):
+					<a href="${ctx['button_follow']['url']}" style="-webkit-user-select: none; padding: 5px 10px; font-size: 12px; line-height: 18px; color: #FFFFFF; border-color:#a24689; text-decoration: none; display: inline-block; margin-bottom: 0px; font-weight: 400; text-align: center; vertical-align: middle; cursor: pointer; white-space: nowrap; background-image: none; background-color: #a24689; border: 1px solid #a24689; border-radius:3px" class="o_default_snippet_text">${ctx['button_follow']['title']}</a>
+					
+					% elif ctx.get('button_unfollow'):
+					<a href="${ctx['button_unfollow']['url']}" style="-webkit-user-select: none; padding: 5px 10px; font-size: 12px; line-height: 18px; color: #FFFFFF; border-color:#a24689; text-decoration: none; display: inline-block; margin-bottom: 0px; font-weight: 400; text-align: center; vertical-align: middle; cursor: pointer; white-space: nowrap; background-image: none; background-color: #a24689; border: 1px solid #a24689; border-radius:3px" class="o_default_snippet_text">${ctx['button_unfollow']['title']}</a>
+					% endif
+	
+					% if not ctx.get('button_access') and not ctx.get('button_follow') and not ctx.get('button_unfollow') and ctx.get('model_name'):
+					<p style="padding: 5px 10px; font-size: 12px;">
+					About <strong>${ctx['model_name']}
+					% if ctx.get('record_name'):
+					: ${ctx['record_name']}
+					% endif
+					</strong>
+					</p>
+					% endif
+				</td>
+				
+			</tr>
+		</tbody></table>
+	</div>
+	<div style="padding:0px; width:600px; margin:0 auto; background: #FFFFFF repeat top /100%; color:#777777">
+		<table cellspacing="0" cellpadding="0" style="vertical-align:top; padding:0px; border-collapse:collapse; background:inherit; color:inherit">
+			<tbody><tr>
+				<td valign="top" style="width:600px; padding:5px 10px 5px 5px;">
+					<div>
+						<hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0;margin:15px auto;padding:0">
+					</div>
+				</td>
+			</tr></tbody>
+		</table>
+	</div>
+	<div style="padding:0px; width:600px; margin:0 auto; background: #FFFFFF repeat top /100%;color:#777777">
+		<table cellspacing="0" cellpadding="0" border="0" style="margin: 0 auto; width:600px; border-collapse:collapse; background:inherit; color:inherit">
+			<tbody><tr>
+				<td style="padding:5px 10px 5px 5px;font-size: 14px;">
+					${object.body | safe}
+					% if ctx.get('tracking'):
+						<ul>
+						% for tracking in ctx['tracking']
+							<li>${tracking[0]} : ${tracking[1]} -&gt; ${tracking[2]}</li>
+						% endfor
+						</ul>
+					% endif
+				</td>
+			</tr></tbody>
+		</table>
+	</div>
+	% if ctx.get('signature'):
+	<div style="padding:0px; width:600px;margin:0 auto; background: #FFFFFF repeat top /100%;color:#777777">
+		<table cellspacing="0" cellpadding="0" border="0" style="margin: 0 auto; width:600px; border-collapse:collapse; background:inherit; color:inherit">
+			<tbody><tr>
+				<td style="padding:5px 10px 5px 5px;font-size: 14px; text-align: left;">
+					${ctx['signature'] | safe}
+				</td>
+			</tr></tbody>
+		</table>
+	</div>
+	% endif
+	]]></field>
+</record>
+
+<record id="action_source_configuration" model="ir.actions.act_window">
+    <field name="name">Source</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">utm.source</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<record id="action_cust_faculty_configuration" model="ir.actions.act_window">
+    <field name="name">Customer Faculty</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">customer.faculty</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<record id="action_payment_term_configuration" model="ir.actions.act_window">
+    <field name="name">Payment Term</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">payment.term</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<record id="action_const_firm_configuration" model="ir.actions.act_window">
+    <field name="name">Constitution Firm</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">constitution.firm</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<record id="action_dealing_area_configuration" model="ir.actions.act_window">
+    <field name="name">Dealing Area</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">dealing.area</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<record id="action_dispatch_through_configuration" model="ir.actions.act_window">
+    <field name="name">Dispatch Through</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">dispatch.through</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<record id="action_res_users_extension" model="ir.actions.act_window">
+	<field name="name">Users</field>
+	<field name="type">ir.actions.act_window</field>
+	<field name="res_model">res.users</field>
+	<field name="view_type">form</field>
+	<field name="view_mode">tree,form</field>
+	<field name="domain">[('id','!=', 1)]</field>
+</record>
+
+<record id="act_re_res_users_view1" model="ir.actions.act_window.view">
+	<field eval="10" name="sequence"/>
+	<field name="view_mode">tree</field>
+	<field name="view_id" ref="base.view_users_tree"/>
+	<field name="act_window_id" ref="action_res_users_extension"/>
+</record>
+
+<record id="act_re_res_users_view2" model="ir.actions.act_window.view">
+	<field eval="20" name="sequence"/>
+	<field name="view_mode">form</field>
+	<field name="view_id" ref="base.view_users_form"/>
+	<field name="act_window_id" ref="action_res_users_extension"/>
+</record>
+
+</data>
+</openerp>

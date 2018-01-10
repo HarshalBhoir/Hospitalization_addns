@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<odoo>
+
+<record id="dealer_info_form" model="ir.ui.view">
+	<field name="name">dealer.info.form</field>
+	<field name="model">res.partner</field>
+	<field name="inherit_id" ref="base.view_partner_form"/>
+    <field name="arch" type="xml">
+		<field name="country_id" position="attributes">
+			<attribute name="readonly">1</attribute>
+		</field>
+		<div name="button_box" position="inside">
+			<button class="oe_stat_button o_res_partner_tip_opp" type="action"
+				attrs="{'invisible': [('dealer', '=', False)]}"
+				name="%(pro_crm.action_crm_enquiry)d"
+				icon="fa-star"
+				context="{'search_default_dealer_name': active_id}">
+				<field string="Enquiry" name="enquiry_count" widget="statinfo"/>
+			</button>
+			<button class="oe_stat_button" type="action"
+				attrs="{'invisible': [('dealer', '=', False)]}"
+				name="%(pro_crm.action_sale_order_form)d"
+				icon="fa-usd"
+				context="{'search_default_dealer_name': active_id}">
+				<field string="Sales" name="sale_count" widget="statinfo"/>
+			</button>
+		</div>
+		<xpath expr="//sheet/div/button[@name='toggle_active']" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+		<field name="company_type" position="attributes">
+			<attribute name="attrs">{'invisible': [('dealer', '=', True )]}</attribute>
+		</field>
+		<field name="name" position="before">
+			<field name="cust_code" readonly="1" attrs="{'invisible': [('dealer', '=', True )]}"/>
+		</field>
+		<field name="parent_id" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</field>
+		<field name='website' position="after">
+			<field name="constitution_firm" options='{"no_open": True, "no_create": True}' attrs="{'invisible': [('dealer', '!=', True )]}"/>
+			<field name="hosp_name"/>
+			<field name="year" attrs="{'invisible': [('dealer', '!=', True )]}"/>
+			<field name="financial_turn_over" attrs="{'invisible': [('dealer', '!=', True )]}"/>
+			<field name="area" attrs="{'invisible': [('dealer', '!=', True )]}"/>
+			<field name="accredations" attrs="{'invisible': [('dealer', '!=', True )]}"/>
+			<field name="experience" attrs="{'invisible': [('dealer', '!=', True )]}"/>
+			<!--<field name="is_dealer"/>-->
+		</field>
+		<field name="category_id" position="after">
+			<field name="dealing_area" attrs="{'invisible': [('dealer', '!=', True )]}" widget="many2many_tags"/>
+			<field name="product_range" attrs="{'invisible': [('dealer', '!=', True )]}"/>
+			<field name="manager_id" options='{"no_open": True, "no_create": True}' attrs="{'invisible': [('dealer', '=', True )]}"/>
+		</field>
+		<field name="country_id" position="after">
+			<field name="zone" required="1" placeholder="Zone"/>
+		</field>
+		<field name="email" position="after">
+			<field name="pan_no"/>
+			<field name="tin_no"/>
+			<field name="service_tax_reg_no" attrs="{'invisible': [('customer', '!=', True )]}"/>
+			<field name="cst_no" attrs="{'invisible': ['|',('customer', '!=', True ),('company_type', '=', 'person') ]}"/>
+			<field name="sales_tax_no" attrs="{'invisible': ['|',('customer', '!=', True ),('company_type', '=', 'person')]}"/>
+		</field>
+		<field name="user_id" position="before">
+			<field name="dealer"/>
+		</field>
+		<xpath expr="//notebook/page[3]" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+		<xpath expr="//page[@name='accounting']" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+		<!--<xpath expr="//notebook/page[4]" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>-->
+		<xpath expr="//notebook/page[1]" position="before">
+			<page string="Dealership Details" attrs="{'invisible': [('dealer', '!=', True )]}">
+				<field name="details">
+					<tree editable="bottom">
+						<field name="sr_no"/>
+						<field name="company" required = '1' options='{"no_open": True, "no_create": True}'/>
+						<field name="products" options='{"no_open": True, "no_create": True}'/>
+						<field name="dealer_since"/>
+						<field name="sales_fig"/>
+					</tree>
+				</field>
+			</page>
+		</xpath>
+		<xpath expr="//notebook" position="before">
+			<group col="4" colspan="2" attrs="{'invisible': [('dealer', '!=', True )]}">
+				<group string="Man Power">
+					<field name="manager"/>
+					<field name="sales_marketing"/>
+					<field name="technicians"/>
+					<field name="administration"/>
+					<field name="total"/>
+				</group>
+				<group string="Infrastructure">
+					<field name="size"/>
+					<field name="location"/>
+					<field name="office_loc"/>
+					<field name="rental"/>
+				</group>
+			</group>
+			<group col="4" colspan="2" string="Electrosurgical Unit" attrs="{'invisible': [('dealer', '!=', True )]}">
+				<group>
+					<field name="cautery" widget="radio" options="{'horizontal': true}"/>
+				</group>
+				<group>
+					<field name="installation" widget="radio" options="{'horizontal': true}"/>
+					<field name="brand" attrs="{'invisible': [('installation', '!=', 'yes')]}" options="{'horizontal': true}"/>
+					<field name="years" attrs="{'invisible': [('installation', '!=', 'yes')]}" options="{'horizontal': true}"/>
+				</group>
+			</group>
+			<group col="4" colspan="2" string="LED OT Light" attrs="{'invisible': [('dealer', '!=', True )]}">
+				<group>
+					<field name="led_ot" widget="radio" options="{'horizontal': true}"/>
+				</group>
+				<group>
+					<field name="servicing" widget="radio" options="{'horizontal': true}"/>
+					<field name="brand1" attrs="{'invisible': [('servicing', '!=', 'yes')]}"/>
+					<field name="years1" attrs="{'invisible': [('servicing', '!=', 'yes')]}"/>
+				</group>
+			</group>
+		</xpath>
+	</field>
+</record>
+
+<record id="dealer_info_tree_extension" model="ir.ui.view">
+	<field name="name">dealer.info.tree</field>
+	<field name="model">res.partner</field>
+    <field name="arch" type="xml">
+	<tree>
+		<field name="create_date" string="Date"/>
+		<field name="display_name"/>
+		<field name="email"/>
+		<field name="pan_no"/>
+		<field name="tin_no"/>
+		<field name="website"/>
+		<field name="hosp_name"/>
+		<field name="dealing_area"/>
+	</tree>
+    </field>
+</record>
+
+<record id="customer_info_tree_extension" model="ir.ui.view">
+	<field name="name">customer.info.tree</field>
+	<field name="model">res.partner</field>
+    <field name="arch" type="xml">
+	<tree>
+		<field name="create_date" string="Date"/>
+		<field name="cust_code"/>
+		<field name="display_name"/>
+		<field name="email"/>
+		<field name="pan_no"/>
+		<field name="tin_no"/>
+		<field name="website"/>
+		<field name="hosp_name"/>
+	</tree>
+    </field>
+</record>
+
+<record id="dealer_info_search" model="ir.ui.view">
+	<field name="name">dealer.info.search</field>
+	<field name="model">res.partner</field>
+	<field name="inherit_id" ref="base.view_res_partner_filter"/>
+    <field name="arch" type="xml">
+		<xpath expr="//group" position="inside">
+			<filter string="Hospital" context="{'group_by':'hosp_name'}"/>
+			<filter string="Dealing Area" context="{'group_by':'dealing_area'}"/>
+			<filter string="Financial Turnover" context="{'group_by':'financial_turn_overs'}"/>
+		</xpath>
+		<xpath expr="//search" position="inside">
+			<field name="hosp_name"/>
+		</xpath>
+		<xpath expr="//filter[@name='supplier']" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+		<xpath expr="//filter[@name='inactive']" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+    </field>
+</record>
+
+<record id="res_partner_opt_out_search_extension" model="ir.ui.view">
+	<field name="name">res.partner.search</field>
+	<field name="model">res.partner</field>
+	<field name="inherit_id" ref="mail.res_partner_opt_out_search"/>
+    <field name="arch" type="xml">
+		<xpath expr="//filter[@name='not_opt_out']" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+    </field>
+</record>
+
+<record id="action_dealer_info" model="ir.actions.act_window">
+	<field name="name">Dealer Registration</field>
+	<field name="type">ir.actions.act_window</field>
+	<field name="res_model">res.partner</field>
+	<field name="view_type">form</field>
+	<field name="domain">[('dealer','=',True)]</field>
+	<field name="context">{'search_default_dealer': 1,'default_customer': 0,'default_dealer': 1}</field>
+	<field name="view_mode">tree,form</field>
+	<field name="view_id" ref="pro_crm.dealer_info_tree_extension"/>
+</record>
+
+<record id="action_customer_form_extension" model="ir.actions.act_window">
+	<field name="name">Customers</field>
+	<field name="type">ir.actions.act_window</field>
+	<field name="res_model">res.partner</field>
+	<field name="view_type">form</field>
+	<field name="view_mode">kanban,tree,form</field>
+	<field name="domain">[('customer','=',True)]</field>
+	<field name="context">{"search_default_customer":1}</field>
+	<field name="view_id" ref="pro_crm.customer_info_tree_extension"/>
+	<field name="search_view_id" ref="base.view_res_partner_filter"/>
+	<field name="help" type="html">
+	  <p class="oe_view_nocontent_create">
+		Click to add a contact in your address book.
+	  </p><p>
+		Odoo helps you easily track all activities related to
+		a customer; discussions, history of business opportunities,
+		documents, etc.
+	  </p>
+	</field>
+</record>
+
+</odoo>

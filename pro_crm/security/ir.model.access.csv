@@ -1,0 +1,74 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_crm_configuration_user,pro_crm.crm_configuration user,model_crm_configuration,base.group_sale_salesman,1,0,0,0
+access_crm_configuration_manager,pro_crm.crm_configuration manager,model_crm_configuration,pro_crm.group_pro_crm_admin,1,1,1,1
+access_crm_indent_manager,pro_crm.crm_indent manager,model_crm_indent,base.group_sale_salesman,1,1,1,0
+access_crm_indent_stock_manager,pro_crm.crm_indent stock manager,model_crm_indent,stock.group_stock_manager,1,1,1,0
+access_sale_indent_manager,pro_crm.sale_indent manager,model_sale_indent,base.group_sale_salesman,1,1,1,1
+access_customer_faculty_manager,pro_crm.customer_faculty manager,model_customer_faculty,base.group_sale_salesman,1,1,1,0
+access_constitution_firm_manager,pro_crm.constitution_firm manager,model_constitution_firm,base.group_sale_salesman,1,1,1,0
+access_details_dealership_manager,pro_crm.details_dealership manager,model_detail_dealership,base.group_sale_salesman,1,1,1,0
+access_product_enquiry_manager,pro_crm.product_enquiry manager,model_product_enquiry,base.group_sale_salesman,1,1,1,1
+access_demo_details_manager,pro_crm.demo_details manager,model_demo_details,base.group_sale_salesman,1,1,1,1
+access_crm_lead2opportunity_manager,pro_crm.crm_lead2opportunity manager,model_crm_lead2opportunity_partner,base.group_sale_salesman,1,1,1,1
+access_sale_order_manager,pro_crm.crm_sale_order manager,sale.model_sale_order,pro_crm.group_pro_crm_zsm,1,1,1,1
+access_sale_order_line_manager,pro_crm.crm_sale_order_line manager,sale.model_sale_order_line,pro_crm.group_pro_crm_zsm,1,1,1,1
+access_sale_advance_payment_inv_manager,pro_crm.sale_advance_payment_inv manager,sale.model_sale_advance_payment_inv,pro_crm.group_pro_crm_zsm,1,1,1,1
+access_sale_order_user,pro_crm.crm_sale_order manager,sale.model_sale_order,base.group_sale_salesman_all_leads,1,1,1,1
+access_sale_order_line_user,pro_crm.crm_sale_order_line manager,sale.model_sale_order_line,base.group_sale_salesman_all_leads,1,1,1,1
+access_sale_advance_payment_inv_user,pro_crm.sale_advance_payment_inv manager,sale.model_sale_advance_payment_inv,base.group_sale_salesman,1,1,1,1
+access_product_details_user,pro_crm.product_details user,model_product_details,base.group_sale_salesman,1,1,1,1
+access_product_details_manager,pro_crm.product_details manager,model_product_details,pro_crm.group_pro_crm_zsm,1,1,1,1
+access_product_details_logistic,pro_crm.product_details logistic,model_product_details,stock.group_stock_manager,1,1,1,1
+access_file_document_manager,pro_crm.file_document manager,model_file_document,base.group_sale_salesman,1,1,1,0
+access_dispatch_through_manager,pro_crm.dispatch_through manager,model_dispatch_through,base.group_sale_salesman,1,1,1,0
+access_product_manager,product.manager,product.model_product_product,pro_crm.group_pro_crm_zsm,1,1,0,0
+access_payment_term_manager,pro_crm.payment_term manager,model_payment_term,base.group_sale_salesman,1,1,1,0
+access_res_partner_user,pro_crm.crm_res_partner user,base.model_res_partner,base.group_sale_salesman,1,0,0,0
+access_res_partner_zsm,pro_crm.crm_res_partner zsm,base.model_res_partner,pro_crm.group_pro_crm_zsm,1,0,0,0
+access_res_partner_manager,pro_crm.crm_res_partner manager,base.model_res_partner,base.group_sale_salesman_all_leads,1,0,0,0
+access_res_company_manager,pro_crm.crm_res_company manager,base.model_res_company,pro_crm.group_pro_crm_admin,1,1,0,0
+access_sale_analysis_user,pro_crm.sale_analysis user,model_sale_analysis,pro_crm.group_pro_crm_zsm,1,1,0,0
+access_sale_analysis_manager,pro_crm.sale_analysis manager,model_sale_analysis,pro_crm.group_pro_crm_admin,1,1,1,1
+access_sale_analysis_ceo,pro_crm.sale_analysis ceo,model_sale_analysis,pro_crm.group_pro_crm_ceo,1,1,0,0
+access_sale_analysis_product_user,pro_crm.sale_analysis_product user,model_sale_analysis_product,pro_crm.group_pro_crm_zsm,1,1,0,0
+access_sale_analysis_product_manager,pro_crm.sale_analysis_product manager,model_sale_analysis_product,pro_crm.group_pro_crm_admin,1,1,1,1
+access_sale_analysis_product_ceo,pro_crm.sale_analysis_product ceo,model_sale_analysis_product,pro_crm.group_pro_crm_ceo,1,1,0,0
+access_sale_analysis_report_user,pro_crm.sale_analysis_report user,model_sale_analysis_report,pro_crm.group_pro_crm_zsm,1,1,1,0
+access_sale_analysis_report_manager,pro_crm.sale_analysis_report manager,model_sale_analysis_report,pro_crm.group_pro_crm_admin,1,1,1,1
+access_sale_analysis_report_ceo,pro_crm.sale_analysis_report ceo,model_sale_analysis_report,pro_crm.group_pro_crm_ceo,1,1,0,0
+access_sale_analysis_product_category_user,pro_crm.sale_analysis_product_category user,model_sale_analysis_product_category,pro_crm.group_pro_crm_zsm,1,1,1,1
+access_sale_analysis_product_category_manager,pro_crm.sale_analysis_product_category manager,model_sale_analysis_product_category,pro_crm.group_pro_crm_admin,1,1,1,1
+access_sale_analysis_product_category_ceo,pro_crm.sale_analysis_product_category ceo,model_sale_analysis_product_category,pro_crm.group_pro_crm_ceo,1,1,1,1
+access_dashboard_dashboard_manager,pro_crm.dashboard_dashboard manager,dashboard.model_dashboard_dashboard,pro_crm.group_pro_crm_admin,1,1,1,1
+access_dashboard_setting_manager,pro_crm.dashboard_setting manager,dashboard.model_dashboard_settings,pro_crm.group_pro_crm_admin,1,1,1,1
+access_dashboard_settingchart_manager,pro_crm.dashboard_setting manager,dashboard.model_dashboard_settings_chart,pro_crm.group_pro_crm_admin,1,1,1,1
+access_dashboard_settingline_manager,pro_crm.dashboard_setting manager,dashboard.model_dashboard_settings_line,pro_crm.group_pro_crm_admin,1,1,1,1
+access_dashboard_dashboard_ceo,pro_crm.dashboard_dashboard ceo,dashboard.model_dashboard_dashboard,pro_crm.group_pro_crm_ceo,1,1,1,1
+access_dashboard_setting_ceo,pro_crm.dashboard_setting ceo,dashboard.model_dashboard_settings,pro_crm.group_pro_crm_ceo,1,1,1,1
+access_dashboard_settingchart_ceo,pro_crm.dashboard_setting ceo,dashboard.model_dashboard_settings_chart,pro_crm.group_pro_crm_ceo,1,1,1,1
+access_dashboard_settingline_ceo,pro_crm.dashboard_setting ceo,dashboard.model_dashboard_settings_line,pro_crm.group_pro_crm_ceo,1,1,1,1
+access_lead_lost_manager,pro_crm.lead_lost manager,model_lost_reason,pro_crm.group_pro_crm_admin,1,1,1,1
+access_delivery_term_manager,pro_crm.delivery_term manager,model_delivery_term,pro_crm.group_pro_crm_admin,1,1,1,1
+access_delivery_term_user,pro_crm.delivery_term user,model_delivery_term,base.group_sale_salesman,1,1,1,1
+access_lead_lost_user,pro_crm.lead_lost user,model_lost_reason,base.group_sale_salesman,1,1,1,1
+access_crm_lead_lost_extension_user,pro_crm.crm_lead_lost_extension,model_crm_lead_lost_extension,base.group_sale_salesman,1,1,1,1
+access_payment_term_user,pro_crm.payment_term_user,account.model_account_payment_term,base.group_sale_salesman,1,1,0,0
+access_res_users_user,pro_crm.crm_res_users user,base.model_res_users,base.group_sale_salesman,1,1,0,0
+access_res_users_zsm,pro_crm.crm_res_users zsm,base.model_res_users,pro_crm.group_pro_crm_zsm,1,1,0,0
+access_dealing_area_manager,pro_crm.dealing_area manager,model_dealing_area,base.group_sale_salesman,1,1,1,0
+,,,,,,,
+,,,,,,,
+access_product_enquiry_marketing,pro_crm.product_enquiry marketing,model_product_enquiry,pro_crm.group_pro_crm_marketing,1,1,1,1
+access_demo_details_marketing,pro_crm.demo_details marketing,model_demo_details,pro_crm.group_pro_crm_marketing,1,1,1,1
+access_customer_faculty_marketing,pro_crm.customer_faculty marketing,model_customer_faculty,pro_crm.group_pro_crm_marketing,1,1,1,0
+access_crm_lead2opportunity_marketing,pro_crm.crm_lead2opportunity marketing,model_crm_lead2opportunity_partner,pro_crm.group_pro_crm_marketing,1,1,1,1
+access_crm_indent_marketing,pro_crm.crm_indent marketing,model_crm_indent,pro_crm.group_pro_crm_marketing,1,1,1,0
+access_crm_lead_marketing,pro_crm.crm_lead marketing,model_crm_lead,pro_crm.group_pro_crm_marketing,0,1,1,0
+access_product_details_marketing,pro_crm.product_details marketing,model_product_details,pro_crm.group_pro_crm_marketing,1,1,1,1
+access_lead_lost_marketing,pro_crm.lead_lost marketing,model_lost_reason,pro_crm.group_pro_crm_marketing,1,1,1,1
+access_crm_configuration_marketing,pro_crm.crm_configuration marketing,model_crm_configuration,pro_crm.group_pro_crm_marketing,1,1,1,1
+access_details_dealership_marketing,pro_crm.details_dealership marketing,model_detail_dealership,pro_crm.group_pro_crm_marketing,1,1,1,0
+,,,,,,,
+,,,,,,,
+sale_stock.access_sale_order_stock_worker,sale.order stock worker,sale.model_sale_order,stock.group_stock_user,1,0,0,0
+sale.access_sale_order_invoicing_payments,sale.order,sale.model_sale_order,account.group_account_invoice,1,0,0,0

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    
+<menuitem name="Pro CRM" id="menu_pro_crm" sequence="1"/>
+
+<!--Dashboard-->
+<menuitem name="Dashboard" id="menu_crm_dashboard"  parent="menu_pro_crm"
+                      sequence= "1" action="dashboard.dashboard_action_view" groups="pro_crm.group_pro_crm_admin,pro_crm.group_pro_crm_ceo"/>
+
+<!--Sales-->
+<menuitem name="Sales" id="menu_crm_sales"  parent="menu_pro_crm"
+                      sequence= "2"/>
+
+<menuitem name="Enquiry" id="menu_crm_enquiry"  parent="menu_crm_sales"
+                      sequence= "1" action="action_crm_enquiry" groups="base.group_sale_salesman,pro_crm.group_pro_crm_marketing"/>
+
+<menuitem name="Opportunities" id="menu_crm_opportunity"  parent="menu_crm_sales"
+                      sequence= "2" action="crm.crm_lead_opportunities_tree_view" groups="base.group_sale_salesman"/>
+
+<menuitem name="Quotations" id="menu_crm_quotations"  parent="menu_crm_sales"
+                      sequence= "3" action="sale.action_quotations" groups="base.group_sale_salesman_all_leads"/>
+
+<menuitem name="Final Quotation" id="menu_crm_sale_order"  parent="menu_crm_sales"
+                      sequence= "4" action="action_sale_order_form" groups="base.group_sale_salesman_all_leads,stock.group_stock_manager"/>
+
+<menuitem name="Demo Indent" id="menu_crm_indent"  parent="menu_crm_sales"
+                      sequence= "5" action="action_indent_form" groups="base.group_sale_salesman,stock.group_stock_manager"/>
+
+<menuitem name="Sale Indent" id="menu_crm_sale_indent"  parent="menu_crm_sales"
+                      sequence= "4" action="action_sale_indent_form" groups="base.group_sale_salesman_all_leads,stock.group_stock_manager"/>
+
+<menuitem name="Customers" id= "menu_customer_info"  parent= "menu_crm_sales"
+                      sequence= "6" action="action_customer_form_extension" groups="base.group_sale_salesman,stock.group_stock_manager,pro_crm.group_pro_crm_marketing"/>
+
+<menuitem name="Products" id="menu_crm_products"  parent="menu_crm_sales"
+                      sequence= "7" action="product.product_template_action" groups="pro_crm.group_pro_crm_admin"/>
+
+<menuitem name="Product Categories" id="menu_crm_product_categories"  parent="menu_crm_sales"
+                      sequence= "8" action="product.product_category_action_form" groups="pro_crm.group_pro_crm_admin"/>
+
+<!--Dealers-->
+<menuitem name="Dealers" id="menu_crm_dealers"  parent="menu_pro_crm"
+                      sequence= "3" groups="base.group_sale_salesman_all_leads"/>
+
+<menuitem name= "Dealer Registration" id= "menu_dealer_info"  parent= "menu_crm_dealers"
+                      sequence= "1" action="action_dealer_info" groups="base.group_sale_salesman_all_leads"/>
+
+<!--Sales-->
+<record model="ir.ui.menu" id="base.menu_base_partner">
+    <field name="groups_id" eval="[(6,0,[ref('pro_crm.group_pro_crm_hidden')])]"/>
+</record>
+
+<!--Settings-->
+<record model="ir.ui.menu" id="base.menu_administration">
+    <field name="groups_id" eval="[(6,0,[ref('pro_crm.group_pro_crm_hidden')])]"/>
+</record>
+
+<!--Apps-->
+<record model="ir.ui.menu" id="base.menu_management">
+    <field name="groups_id" eval="[(6,0,[ref('pro_crm.group_pro_crm_hidden')])]"/>
+</record>
+
+<!--Purchases-->
+<record model="ir.ui.menu" id="base.menu_purchase_root">
+    <field name="groups_id" eval="[(6,0,[ref('pro_crm.group_pro_crm_hidden')])]"/>
+</record>
+
+<!--Inventory-->
+<record model="ir.ui.menu" id="stock.menu_stock_root">
+    <field name="groups_id" eval="[(6,0,[ref('pro_crm.group_pro_crm_hidden')])]"/>
+</record>
+
+<!--Invoicing-->
+<record model="ir.ui.menu" id="account.menu_finance">
+    <field name="groups_id" eval="[(6,0,[ref('pro_crm.group_pro_crm_hidden')])]"/>
+</record>
+
+<!--Dashboards-->
+<record model="ir.ui.menu" id="base.menu_board_root">
+    <field name="groups_id" eval="[(6,0,[ref('pro_crm.group_pro_crm_hidden')])]"/>
+</record>
+
+<record model="ir.ui.menu" id="dashboard.dashboard_root">
+    <field name="groups_id" eval="[(6,0,[ref('pro_crm.group_pro_crm_hidden')])]"/>
+</record>
+
+<record model="ir.ui.menu" id="hr_expense.menu_hr_expense_root">
+    <field name="groups_id" eval="[(6,0,[ref('stock.group_stock_manager'),ref('base.group_sale_salesman'),ref('pro_crm.group_pro_crm_petty_cash'),ref('pro_crm.group_pro_crm_marketing')])]"/>
+</record>
+
+<record model="ir.ui.menu" id="mail.menu_contacts">
+    <field name="groups_id" eval="[(6,0,[ref('pro_crm.group_pro_crm_admin')])]"/>
+</record>
+
+<record model="ir.ui.menu" id="hr.menu_hr_root">
+    <field name="groups_id" eval="[(6,0,[ref('pro_crm.group_pro_crm_admin')])]"/>
+</record>
+
+<!--Invoices-->
+<menuitem name="Sale List" id="menu_crm_invoices"  parent="menu_pro_crm"
+                      sequence= "4" action="account.action_invoice_tree1" groups="base.group_sale_salesman_all_leads,stock.group_stock_manager,pro_crm.group_pro_crm_marketing"/>
+
+<!--<menuitem name= "Sale Invoice" id= "menu_sale_incoice"  parent= "menu_crm_invoices"
+                      sequence= "1" action="account.action_invoice_tree1" groups="base.group_sale_salesman_all_leads,stock.group_stock_manager"/>-->
+
+<!--Dispatch Management-->
+<!--<menuitem name="Dispatch Mangement" id="menu_crm_dispatch"  parent="menu_pro_crm"-->
+<!--                      sequence= "1" />-->
+<!---->
+<!--<menuitem name="Sale Indent" id="menu_sale_indent"  parent="menu_crm_dispatch"-->
+<!--                      sequence= "1" action="action_sale_indent_form"/>-->
+
+<!--Configuration-->
+<menuitem name="Documents" id="documents" action="file_document_action" parent="menu_pro_crm" sequence="5" groups="base.group_sale_salesman"/>
+
+<menuitem name="Target Vs Achievement" id="menu_target_vs_achievement" action="action_sale_analysis_form" parent="menu_pro_crm" sequence="6" groups="pro_crm.group_pro_crm_zsm,pro_crm.group_pro_crm_admin,pro_crm.group_pro_crm_ceo"/>
+
+<menuitem name='Configuration' id="menu_configuration" parent="menu_pro_crm" sequence="7" groups="pro_crm.group_pro_crm_admin"/>
+
+<menuitem name='Users' id="menu_users_configuration" parent="menu_configuration" sequence="1" action="action_res_users_extension" groups="pro_crm.group_pro_crm_admin"/>
+
+<!--<menuitem name='Groups' id="menu_groups_configuration" parent="menu_configuration" sequence="2" action="base.action_res_groups"/>-->
+
+<menuitem name='Zone' id="menu_zone_configuration" parent="menu_configuration" sequence="4" action="action_zone_configuration"/>
+
+<menuitem name='Lead Lost Reason' id="menu_lead_lost_reason" parent="menu_configuration" sequence="4" action="action_lead_lost_reason"/>
+
+<menuitem name='Delivery Term' id="menu_delivery_term" parent="menu_configuration" sequence="4" action="action_delivery_term"/>
+
+<menuitem name='Source' id="menu_source_configuration" parent="menu_configuration" sequence="5" action="action_source_configuration"/>
+
+<menuitem name='Customer Faculty' id="menu_cust_faculty_configuration" parent="menu_configuration" sequence="6" action="action_cust_faculty_configuration"/>
+
+<menuitem name='Payment Term' id="menu_payment_term_configuration" parent="menu_configuration" sequence="6" action="account.action_payment_term_form"/>
+
+<menuitem name='Constitution Firm' id="menu_const_firm_configuration" parent="menu_configuration" sequence="7" action="action_const_firm_configuration"/>
+
+<menuitem name='Dealing Area' id="menu_dealing_area_configuration" parent="menu_configuration" sequence="7" action="action_dealing_area_configuration" groups="pro_crm.group_pro_crm_hidden"/>
+
+<menuitem name='Dispatch through' id="menu_dispatch_through_configuration" parent="menu_configuration" sequence="8" action="action_dispatch_through_configuration"/>
+
+<menuitem name='Configure Company Data' id="menu_configure_company_configuration" parent="menu_configuration" sequence="9" action="base.action_res_company_form"/>
+
+<menuitem name='Outgoing Mail Servers' id="menu_outgoing_mail_configuration" parent="menu_configuration" sequence="9" action="base.action_ir_mail_server_list"/>
+
+<menuitem name='Taxes' id="menu_configure_taxes" parent="menu_configuration" sequence="10" action="account.action_tax_form" groups="pro_crm.group_pro_crm_admin"/>
+</odoo>

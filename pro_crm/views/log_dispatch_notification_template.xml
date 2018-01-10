@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+     <record id="log_dispatch_notification_template" model="mail.template">
+            <field name="name">Dispatch Notification</field>
+            <field name="email_from"></field>
+            <field name="model_id" ref="model_crm_indent"/>
+            <field name="subject">Reminder for ${object.ind_no}</field>
+            <!--<field name="email_to" >${object.user_id.partner_id.email}</field>-->
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+                    <h3><b>Hello,</b></h3><br/>
+                    This email is a reminder in regards of demo indent : ${object.ind_no} having approximate date as "${object.approx_date}".<br/><br/>
+            ]]></field>
+        </record>
+    </data>
+</openerp>

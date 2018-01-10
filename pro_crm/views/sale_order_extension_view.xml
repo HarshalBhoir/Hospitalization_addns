@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+<data>
+
+<!-- Quotation Form View -->    
+<record id="sale_order_form" model="ir.ui.view">
+	<field name="name">sale.order.form</field>
+	<field name="model">sale.order</field>
+	<field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+		<xpath expr='//form' position='attributes'>
+			<attribute name="create">false</attribute>
+		</xpath>
+		<field name="payment_term_id" position="after">
+			<field name="payment_term_name" invisible="1"/>
+			<field name="other_term"/> <!--attrs="{'invisible':[('payment_term_name', '!=', 'Others')]}" -->
+            <field name="sale_type" widget="Many2one" required="1" attrs="{'readonly': [('state', 'not in', ('draft','sent'))]}"/>
+			<field name="zone" invisible="0" required="1" readonly="1"/>
+			<field name="delivery_term"/>
+        </field>
+		<xpath expr="//button[@name='%(sale.action_view_sale_advance_payment_inv)d']" position="attributes">
+			<attribute name="string">Create Proforma Invoice</attribute>
+		</xpath>
+		
+		<xpath expr="//field[@name='order_line']" position="attributes">
+			<attribute name="context">{'default_zone':zone}</attribute>
+		</xpath>
+
+		<field name="user_id" position="attributes">
+			<attribute name="readonly">True</attribute>
+		</field>
+		<field name="partner_id" position="attributes">
+			<attribute name="options">{'no_create': True, 'no_create_edit':True}</attribute>
+		</field>
+		<field name="partner_id" position="after">
+			<field name="hospital_name" readonly="0"/>
+			<field name="pan_no"/>
+			<field name="c_form" widget="radio" options="{'horizontal': true}"/>
+			<field name="manager_id" invisible="1"/>
+		</field>
+		<xpath expr="//button[@name='action_confirm'][2]" position="attributes">
+			<attribute name="groups">pro_crm.group_pro_crm_zsm, base.group_sale_manager</attribute>
+		</xpath>
+		<xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="after">
+			<field name="zone" invisible="1"/>
+			<!--<field name="sale_type" invisible="1"/>-->
+		</xpath>
+		<group name="sale_pay" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</group>
+		<!--<xpath expr="//notebook/page[2]/group/group[1]/field[@name='team_id']" position="replace"></xpath>-->
+		
+		
+		<!--<xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="attributes">-->
+		<!--	<attribute name="options">{'no_create': True, 'no_create_edit':True}</attribute>-->
+		<!--</xpath>-->
+		<!--<xpath expr="//field[@name='order_line']/tree/field[@name='product_uom']" position="attributes">-->
+		<!--	<attribute name="options">{'no_create': True, 'no_create_edit':True}</attribute>-->
+		<!--</xpath>-->
+		<!--<xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="attributes">-->
+		<!--	<attribute name="options">{'no_create': True, 'no_create_edit':True}</attribute>-->
+		<!--</xpath>-->
+		
+		
+		<xpath expr="//field[@name='order_line']//form//field[@name='product_id']" position="attributes">
+			<attribute name="attrs"></attribute>
+		</xpath>
+		<xpath expr="//field[@name='order_line']//tree//field[@name='product_id']" position="attributes">
+			<attribute name="attrs"></attribute>
+		</xpath>
+		
+		<xpath expr="//field[@name='order_line']//form//field[@name='qty_delivered']" position="attributes">
+			<attribute name="attrs"></attribute>
+		</xpath>
+		<xpath expr="//field[@name='order_line']//tree//field[@name='qty_delivered']" position="attributes">
+			<attribute name="attrs"></attribute>
+		</xpath>
+		
+		<xpath expr="//field[@name='order_line']//form//field[@name='price_unit']" position="attributes">
+			<attribute name="attrs"></attribute>
+		</xpath>
+		<xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="attributes">
+			<attribute name="attrs"></attribute>
+		</xpath>
+		
+		<xpath expr="//field[@name='order_line']//form//field[@name='tax_id']" position="attributes">
+			<attribute name="attrs"></attribute>
+		</xpath>
+		<xpath expr="//field[@name='order_line']//tree//field[@name='tax_id']" position="attributes">
+			<attribute name="attrs"></attribute>
+		</xpath>
+		
+		<field name="amount_tax" position="after">
+			<field name="amount_delivery"/>
+		</field>
+	</field>
+</record>
+
+
+<record id="sale_stock_order_form" model="ir.ui.view">
+	<field name="name">sale.stock.order.form</field>
+	<field name="model">sale.order</field>
+	<field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+    <field name="arch" type="xml">
+		<xpath expr="//button[@name='action_view_delivery']" position="replace">
+			<button type="object"
+				name="action_view_delivery"
+				class="oe_stat_button"
+				icon="fa-truck"
+				attrs="{'invisible': [('delivery_count', '=', 0)]}" groups="base.group_user">
+				<field name="delivery_count" widget="statinfo" string="Sale Indent"/>
+			</button>
+		</xpath>
+		<group name="sale_shipping" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</group>
+	</field>
+</record>
+
+<!--<record id="sale_order_form1" model="ir.ui.view">
+	<field name="name">sale.order.form</field>
+	<field name="model">sale.order</field>
+	<field name="inherit_id" ref="sale_crm.sale_view_inherit123"/>
+    <field name="arch" type="xml">
+		<field name="tag_ids" position="attributes">
+			<attribute name="options">{'no_create': True, 'no_create_edit':True}</attribute>
+		</field>
+	</field>
+</record>-->
+
+
+<record id="stock_picking_form" model="ir.ui.view">
+	<field name="name">stock.picking.form</field>
+	<field name="model">stock.picking</field>
+	<field name="inherit_id" ref="stock.view_picking_form"/>
+    <field name="arch" type="xml">
+		<xpath expr='//form' position='attributes'>
+			<attribute name="create">false</attribute>
+		</xpath>
+		<field name="origin" position="after">
+            <field name="sale_type" attrs="{'readonly': [('state', 'not in', ('draft'))]}" />
+			<field name="priority"/>
+			<field name="zone" readonly="1"/>
+        </field>
+		<button name="do_unreserve" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</button>
+		<button name="action_cancel" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</button>
+		<button name="action_confirm" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</button>
+		<button name="%(stock.act_stock_return_picking)d" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</button>
+		<button name="do_new_transfer" position="after">
+			<button name="ceo_approval" string="Approve" type="object" class="oe_highlight" icon="fa-check"  attrs="{'invisible':[('state','not in',['draft','partially_available','assigned'])]}" groups="pro_crm.group_pro_crm_ceo"/>
+			<!--<button name="%(pro_crm.demo_cancel_lost_action)d" string="Reject" type="action" class="oe_highlight" icon="fa-close" attrs="{'invisible':[('state','not in',['draft','partially_available','assigned'])]}"/>-->
+			<button name="ceo_rejection" string="Reject" type="object" class="oe_highlight" icon="fa-close" attrs="{'invisible':[('state','not in',['draft','partially_available','assigned'])]}" groups="pro_crm.group_pro_crm_ceo"/>
+		</button>
+		<button name="do_new_transfer" position="replace">
+			<button name="do_new_transfer" states="ceo_approved" string="Validate" type="object" class="oe_highlight" groups="stock.group_stock_manager"/>
+		</button>
+		<field name="state" position="replace">
+			<field name="state" widget="statusbar" statusbar_visible="draft,confirmed,partially_available,ceo_approved,assigned,done" statusbar_colors='{"shipping_except":"red","invoice_except":"red","waiting_date":"blue"}'/>
+		</field>
+		<field name="partner_id" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</field>
+		<field name="location_dest_id" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</field>
+		<field name="location_id" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</field>
+		<field name="location_dest_id" position="after">
+			<field name="deal_done_by" readonly="1"/>
+			<field name="enquiry" readonly="1"/>
+			<field name="manager_id" invisible="1"/>
+			<field name="delivery_term" attrs="{'readonly':[('state','in',['done'])]}"/>
+		</field>
+		<xpath expr="//notebook" position="before">
+			<!--<group attrs="{'invisible': [('sale_type', '!=', 'dealer')]}">-->
+				<group col="4" colspan="2" string="Dealer Information" attrs="{'invisible': [('sale_type', '!=', 'dealer')]}">
+					<field name="dealer_name" domain="[('dealer','=',True)]" attrs="{'readonly':[('state','in',['done'])]}"/>
+					<label for="dealer_street" string="Address"/>
+						<div class="o_address_format">
+							<div class="oe_edit_only">
+							</div>
+							<field name="dealer_street" placeholder="Street..." class="o_address_street"  attrs="{'readonly':[('state','in',['done'])]}"/>
+							<field name="dealer_street2" placeholder="Street 2..." class="o_address_street"  attrs="{'readonly':[('state','in',['done'])]}"/>
+							<field name="dealer_city" placeholder="City" class="o_address_city"  attrs="{'readonly':[('state','in',['done'])]}"/>
+							<field name="dealer_state_id" class="o_address_state" placeholder="State"  attrs="{'readonly':[('state','in',['done'])]}"/>
+							<field name="dealer_zip1" placeholder="ZIP" class="o_address_zip"  attrs="{'readonly':[('state','in',['done'])]}"/>
+							<field name="dealer_country_id" placeholder="Country" class="o_address_country"  attrs="{'readonly':[('state','in',['done'])]}"/>
+						</div>
+						<field name="dealer_pan" attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="dealer_tin" attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="dealer_phone" attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="dealer_mobile" attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="dealer_email" attrs="{'readonly':[('state','in',['done'])]}"/>
+				</group>
+				<group col="4" colspan="2" string="Customer Information" attrs="{'invisible': [('sale_type', '=', 'tender')]}">
+					<field name="cust_name" domain="[('customer','=',True)]" readonly="1"/>
+					<field name="pricelist_id"/>
+					<field name="currency_id"/>
+					<field name="cust_hosp_name" readonly="1"/>
+					<!--<label for="dealer_cust_street" string="Address"/>-->
+					<!--<div class="o_address_format">-->
+					<!--	<div class="oe_edit_only">-->
+					<!--	</div>-->
+					<!--	<field name="dealer_cust_street" placeholder="Street..." class="o_address_street"/>-->
+					<!--	<field name="dealer_cust_street2" placeholder="Street 2..." class="o_address_street"/>-->
+					<!--	<field name="dealer_cust_city" placeholder="City" class="o_address_city"/>-->
+					<!--	<field name="dealer_cust_state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>-->
+					<!--	<field name="dealer_cust_zip1" placeholder="ZIP" class="o_address_zip"/>-->
+					<!--	<field name="dealer_cust_country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}' attrs="{'required': [('name', '=', 'Dealer')]}"/>-->
+					<!--</div>-->
+					<field name="cust_pan" readonly="1"/>
+					<field name="cust_tin" readonly="1"/>
+					<!--<field name="dealer_cust_contact_no"/>-->
+					<!--<field name="dealer_cust_email"/>-->
+					<field name="cust_faculty" attrs="{'readonly':[('state','in',['done'])]}"/>
+					<field name="cust_warranty" attrs="{'readonly':[('state','in',['done'])]}"/>
+				</group>
+				<!--<group col="4" colspan="2" string="Product Details">-->
+				<!--	<field name="dealer_model"/>-->
+				<!--	<field name="dealer_qty"/>-->
+				<!--	<field name="dealer_accessories"/>-->
+				<!--	<field name="dealer_instrument"/>-->
+				<!--</group>-->
+				<!--<group col="4" colspan="2">-->
+				<!--	<field name="dealer_requirement"/>-->
+				<!--	<field name="dealer_spl_instructions"/>-->
+				<!--</group>-->
+				<!--<notebook colspan="4">
+				<page name='dealer_comment' string="Remarks" autofocus="autofocus">
+					<field name="dealer_comment" placeholder="Remarks..."/>
+				</page>
+				</notebook>-->
+				<!--</group>-->
+				<group attrs="{'invisible': [('sale_type', '!=', 'tender')]}">
+					<group col="4" colspan="2" string="Tender Information">
+						<field name="tender_name"/>
+						<field name="tender_no"/>
+						<field name="tender_location"/>
+						<field name="tender_authority"/>
+						<field name="tender_quote_by"/>
+						<field name="tender_comp_name"/>
+						<field name="tender_dealer_name" domain="[('dealer','=',True)]"/>
+					</group>
+					<group col="4" colspan="2" string="Contact Person Information">
+						<field name="tender_contact_name"/>
+						<field name="tender_email"/>
+						<field name="tender_designation"/>
+						<field name="tender_website"/>
+						<field name="tender_mobile_no"/>
+						<field name="tender_landline_no"/>
+						<field name="tender_emd"/>
+						<field name="tender_proof"/>
+					</group>
+				</group>
+				<group col="4" colspan="2" string="Dispatch Details">
+					<field name="expected_date" attrs="{'readonly':[('state','not in',['draft','assigned'])] ,'required':[('state','in',['draft','assigned'])] }"/>
+					<field name="approx_date" attrs="{'readonly':[('state','in',['draft','assigned'])] ,'required':[('state','in',['ceo_approved'])] }"/>
+					<label for="delivery_street" string="Delivery Address"/>
+					<div class="o_address_format">
+						<div class="oe_edit_only">
+						</div>
+						<field name="delivery_street" placeholder="Street..." class="o_address_street" attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="delivery_street2" placeholder="Street 2..." class="o_address_street" attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="delivery_city" placeholder="City" class="o_address_city" attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="delivery_state_id" class="o_address_state" placeholder="State" attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="delivery_zip1" placeholder="ZIP" class="o_address_zip" attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="delivery_country_id" placeholder="Country" class="o_address_country" attrs="{'readonly':[('state','in',['done'])]}"/>
+					</div>
+					<field name="dispatch" attrs="{'readonly':[('state','not in',['draft','assigned'])]}"/>
+				</group>
+			</xpath>
+			<xpath expr="//field[@name='pack_operation_product_ids']/tree/field[@name='from_loc']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='pack_operation_product_ids']/tree/field[@name='to_loc']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='pack_operation_product_ids']/tree/field[@name='qty_done']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<xpath expr="//field[@name='pack_operation_product_ids']/tree" position="attributes">
+				<attribute name="editable"></attribute>
+			</xpath>
+			<xpath expr="//field[@name='pack_operation_product_ids']/tree/field[@name='product_id']" position="after">
+				<field name="description"/>
+				<field name="sr_no"/>
+			</xpath>
+			<xpath expr="//field[@name='pack_operation_product_ids']/tree/field[@name='product_qty']" position="after">
+				<field name="price_unit" readonly="1"/>
+				<field name="tax_id" readonly="1"/>
+				<field name="discount" readonly="1"/>
+				<field name="price_subtotal" readonly="1"/>
+			</xpath>
+			<!--<xpath expr="//field[@name='pack_operation_product_ids']/form/field[@name='product_id']" position="after">
+				<field name="description"/>
+				<field name="sr_no"/>
+			</xpath>
+			<xpath expr="//field[@name='pack_operation_product_ids']/form/field[@name='product_qty']" position="after">
+				<field name="price_unit" readonly="1"/>
+				<field name="price_subtotal" readonly="1" sum="Total"/>
+			</xpath>-->
+			<xpath expr="//notebook/page[3]" position="after">
+				<page name='special_instruction' string="Dispatch Details">
+					<field name="special_instruction" placeholder="Dispatch Details..."/>
+				</page>
+				<page name='c_form' string="C Form">
+					<group col="4" colspan="2">
+						<field name="c_form" widget="radio" options="{'horizontal': true}"/>
+						<field name="road_permit_no" attrs="{'invisible': [('c_form', '!=', 'yes')]}"/>
+						<field name="date" attrs="{'invisible': [('c_form', '!=', 'yes')]}"/>
+						<field name="due_date" attrs="{'invisible': [('c_form', '!=', 'yes')]}"/>
+					</group>
+				</page>
+			</xpath>
+			
+			<xpath expr="//notebook/page[@name='extra']" position="attributes">
+				<attribute name="invisible">True</attribute>
+			</xpath>
+			
+			<xpath expr="//field[@name='pack_operation_product_ids']" position="after">
+				<group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+					<field name="amount_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+					<field name="amount_tax" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+					<field name="amount_delivery" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+					<div class="oe_subtotal_footer_separator oe_inline o_td_label">
+						<label for="amount_total" />
+						<button name="button_dummy"
+						 string="(update)" type="object" class="oe_edit_only oe_link"/>
+					</div>
+					<field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+				</group>
+			</xpath>
+	</field>
+</record>
+
+
+<record model="ir.ui.view"  id="sale_indent_form_extension">
+    <field name="name">view.sale_indent_form_extension.form</field>
+    <field name="model">stock.picking</field>
+    <field name="inherit_id" ref="pro_crm.stock_picking_form"/>
+    <field name="groups_id" eval="[(6, 0, [ref('pro_crm.group_pro_crm_zsm'), ref('pro_crm.group_pro_crm_ceo'), ref('base.group_sale_salesman') ])]"/>
+    <field name="arch" type="xml">
+        <field name="approx_date" position="attributes">
+            <attribute name="readonly">1</attribute>
+        </field>
+    </field>
+</record>
+
+
+<record id="stock_pack_operation_form_extension" model="ir.ui.view">
+	<field name="name">stock.pack.operation.form</field>
+	<field name="model">stock.pack.operation</field>
+	<field name="inherit_id" ref="stock.view_pack_operation_details_form"/>
+    <field name="arch" type="xml">
+		<xpath expr="//group/group[2]" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+		<xpath expr="//group/group[3]" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+		<xpath expr="//group/group/label" position="attributes">
+            <attribute name="invisible">1</attribute>
+		</xpath>
+		<xpath expr="//group/group/div" position="attributes">
+            <attribute name="invisible">1</attribute>
+		</xpath>
+		<field name="product_id" position="after">
+			<field name="sr_no"/>
+        </field>
+	</field>
+</record>
+
+<!--<record id="view_move_picking_tree_extension" model="ir.ui.view">
+	<field name="name">stock.move.tree</field>
+	<field name="model">stock.move</field>
+	<field name="inherit_id" ref="stock.view_move_picking_tree"/>
+    <field name="arch" type="xml">
+		<field name="product_id" position="after">
+            
+			<field name="sr_no"/>
+        </field>
+	</field>
+</record>-->
+
+<record id="sale_quotation_tree" model="ir.ui.view">
+	<field name="name">sale.quotation.tree</field>
+	<field name="model">sale.order</field>
+	<field name="inherit_id" ref="sale.view_quotation_tree"/>
+    <field name="arch" type="xml">
+		<xpath expr='//tree' position='attributes'>
+			<attribute name="create">false</attribute>
+		</xpath>
+	</field>
+</record>
+
+<record id="sale_order_tree" model="ir.ui.view">
+	<field name="name">sale.order.tree</field>
+	<field name="model">sale.order</field>
+	<field name="inherit_id" ref="sale.view_order_tree"/>
+    <field name="arch" type="xml">
+		<xpath expr='//tree' position='attributes'>
+			<attribute name="create">false</attribute>
+		</xpath>
+		<field name="partner_id" position="after">
+			<field name="source_id"/>
+			<field name="sale_type" string="Sale Type"/>
+			<field name="zone"/>
+			<field name="hospital_name"/>
+			<field name="cust_faculty"/>
+		</field>
+		<field name="name" position="attributes">
+			<attribute name="string">Final Quotation Number</attribute>
+		</field>
+		<field name="date_order" position="attributes">
+			<attribute name="string">Final Quotation Date</attribute>
+		</field>
+	</field>
+</record>
+
+<record id="sale_indent_tree_extension" model="ir.ui.view">
+	<field name="name">sale.indent.tree</field>
+	<field name="model">stock.picking</field>
+	<!--<field name="inherit_id" ref="stock.vpicktree"/>-->
+    <field name="arch" type="xml">
+	<tree create="0">
+		<field name="create_date" string="Date"/>
+		<field name="name" string="IND No." />
+		<field name="partner_id" string="Customer"/>
+		<field name="min_date"/>
+		<field name="sale_type"/>
+		<field name="zone"/>
+		<field name="c_form"/>
+		<field name="special_instruction"/>
+		<field name="due_date"/>
+		<field name="origin"/>
+		<field name="state"/>
+	</tree>
+	</field>
+</record>
+
+<record id="sale_order_search" model="ir.ui.view">
+	<field name="name">sale.order.search</field>
+	<field name="model">sale.order</field>
+	<field name="inherit_id" ref="sale.view_sales_order_filter"/>
+    <field name="arch" type="xml">
+		<xpath expr="//group" position="inside">
+			 <filter string="Zone" domain="[]" context="{'group_by':'zone'}"/>
+			 <filter string="Sale Type" domain="[]" context="{'group_by':'sale_type'}"/>
+			 <filter string="Hospital" domain="[]" context="{'group_by':'hospital_name'}"/>
+		</xpath>
+		<xpath expr="//search" position="inside">
+			<field name="zone"/>
+			<field name="dealer_name"/>
+		</xpath>
+		<xpath expr="//filter[@name='message_needaction']" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+	</field>
+</record>
+
+<record id="stock_picking_search" model="ir.ui.view">
+	<field name="name">stock.picking.search</field>
+	<field name="model">stock.picking</field>
+	<field name="inherit_id" ref="stock.view_picking_internal_search"/>
+    <field name="arch" type="xml">
+		<xpath expr="//filter[@name='confirmed']" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+		<xpath expr="//filter[@name='available']" position="attributes">
+			<attribute name="invisible">0</attribute>
+		</xpath>
+		<xpath expr="//filter[@name='waiting']" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+		<xpath expr="//filter[@name='late']" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+		<xpath expr="//filter[@name='backorder']" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+		<xpath expr="//filter[@name='done']" position="before">
+			<filter name="ceo_approved" string="CEO Approved" domain="[('state','=','ceo_approved')]"/>
+		</xpath>
+		<xpath expr="//group//filter[@name='picking_type']" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+		<xpath expr="//group//filter[6]" position="attributes">
+			<attribute name="invisible">1</attribute>
+		</xpath>
+		<xpath expr="//group" position="inside">
+			 <filter string="Zone" domain="[]" context="{'group_by':'zone'}"/>
+			 <filter string="Type Of Sale" domain="[]" context="{'group_by':'sale_type'}"/>
+		</xpath>
+	</field>
+</record>
+
+</data>
+</openerp>

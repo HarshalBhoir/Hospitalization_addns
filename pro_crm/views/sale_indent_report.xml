@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        <report string="Sale Indent" id="stock.action_report_picking" model="stock.picking" report_type="qweb-pdf" name="stock.report_picking" file="stock.report_picking_operations" />
+
+        <report string="Delivery Slip" id="stock.action_report_delivery" model="stock.picking" report_type="qweb-pdf" name="stock.report_deliveryslip" file="stock.report_deliveryslip" groups="pro_crm.group_pro_crm_hidden" />
+
+        <template id="stock.external_layout_barcode_right" inherit_id="report.external_layout" primary="True"></template>
+
+        <template id="delivery.report_shipping2" inherit_id="stock.report_picking"></template>
+
+        <template id="stock.report_picking">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="stock.external_layout_barcode_right">
+                        <div class="page">
+                            <br/>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div t-if="o.picking_type_id.code=='outgoing' and o.partner_id">
+                                        <span><strong>Customer Address:</strong></span>
+                                    </div>
+                                    <div t-if="o.partner_id" name="partner_header">
+                                        <div t-field="o.partner_id" t-field-options='{"widget": "contact", "fields": ["address", "name", "phone", "fax"], "no_marker": true, "phone_icons": true}' />
+                                        <p t-if="o.partner_id.vat">VAT: <span t-field="o.partner_id.vat" />
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <div class="row mt32 mb32" id="informations">
+                                <div t-if="o.deal_done_by" class="col-xs-2">
+                                    <strong>Deal done by:</strong>
+                                    <p t-field="o.deal_done_by" />
+                                </div>
+                                <div t-if="o.enquiry" class="col-xs-2">
+                                    <strong>Enquiry Through:</strong>
+                                    <p t-field="o.enquiry" />
+                                </div>
+                                <div t-if="o.min_date" class="col-xs-2">
+                                    <strong>Scheduled Date:</strong>
+                                    <p t-field="o.min_date" />
+                                </div>
+                                <div t-if="o.zone" class="col-xs-2">
+                                    <strong>Zone:</strong>
+                                    <p t-field="o.zone" />
+                                </div>
+                                <div t-if="o.sale_type" class="col-xs-2">
+                                    <strong>Type of Sale:</strong>
+                                    <p t-field="o.sale_type" />
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <span><h4><strong>Dispatch Details:</strong></h4></span>
+                            <br/>
+                            <br/>
+                            <div class="row mt32 mb32" id="dispatch_details">
+                                <div t-if="o.expected_date" class="col-xs-3">
+                                    <strong t-if="o.expected_date">Expected Date:</strong>
+                                    <p t-field="o.expected_date" />
+                                </div>
+                                <div t-if="o.approx_date" class="col-xs-3">
+                                    <strong>Approximate Date:</strong>
+                                    <p t-field="o.approx_date" />
+                                </div>
+                                <div t-if="o.dispatch" class="col-xs-3">
+                                    <strong>Dispatch Through:</strong>
+                                    <p t-field="o.dispatch" />
+                                </div>
+                                <div t-if="o.delivery_street" class="col-xs-3">
+                                    <strong>Delivery Address:</strong>
+                                    <br/>
+                                    <t t-if="o.delivery_street"><span t-field="o.delivery_street" />
+                                    </t>,
+                                    <br/>
+                                    <t t-if="o.delivery_street2"><span t-field="o.delivery_street2" />
+                                    </t>
+                                    <br/>
+                                    <t t-if="o.delivery_city"><span t-field="o.delivery_city" /> - <span t-field="o.delivery_zip1" />
+                                    </t>
+                                    <br/>
+                                    <t t-if="o.delivery_state_id"><span t-field="o.delivery_state_id" />
+                                    </t>,
+                                    <t t-if="o.delivery_country_id"><span t-field="o.delivery_country_id" />
+                                    </t>
+                                    <br/>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <h2 t-field="o.name" class="mt0" />
+                            <table class="table table-condensed" t-if="o.pack_operation_ids">
+                                <thead>
+                                    <tr style="border: 1px solid black;">
+                                        <th style="border: 1px solid black;"><strong>Product</strong>
+                                        </th>
+                                        <th style="border: 1px solid black;"><strong>Description</strong>
+                                        </th>
+                                        <th style="border: 1px solid black;"><strong>Machine or OTL Sr.No.</strong>
+                                        </th>
+                                        <th class="text-right" style="border: 1px solid black;"><strong>Quantity</strong>
+                                        </th>
+                                        <th class="text-right" style="border: 1px solid black;"><strong>Unit Price</strong>
+                                        </th>
+                                        <th style="border: 1px solid black;" class="text-right"><strong>Taxes</strong>
+                                        </th>
+                                        <th style="border: 1px solid black;"><strong>Discount(%)</strong>
+                                        </th>
+                                        <th class="text-right" style="border: 1px solid black;"><strong>Subtototal</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody style="border: 1px solid black;">
+                                    <tr t-foreach="o.pack_operation_ids" t-as="pack_operation" style="border: 1px solid black;">
+                                        <td style="border: 1px solid black;"><span t-field="pack_operation.product_id" />
+                                            <t t-if="not pack_operation.product_id and pack_operation.package_id"><span t-field="pack_operation.package_id" />
+                                            </t>
+                                        </td>
+                                        <td style="border: 1px solid black;"><span t-field="pack_operation.description" />
+                                            <t t-if="not pack_operation.product_id and pack_operation.package_id"><span t-field="pack_operation.package_id" />
+                                            </t>
+                                        </td>
+                                        <td style="border: 1px solid black;"><span t-field="pack_operation.sr_no" />
+                                            <t t-if="not pack_operation.product_id and pack_operation.package_id"><span t-field="pack_operation.package_id" />
+                                            </t>
+                                        </td>
+                                        <td class="text-right" style="border: 1px solid black;"><span t-field="pack_operation.product_qty" /> <span t-field="pack_operation.product_uom_id" groups="product.group_uom" />
+                                        </td>
+                                        <td class="text-right" style="border: 1px solid black;"><span t-field="pack_operation.price_unit" /> <span t-field="pack_operation.product_uom_id" groups="product.group_uom" />
+                                        </td>
+                                        <td style="border: 1px solid black;" class="text-right"><span t-esc="', '.join(map(lambda x: x.name, pack_operation.tax_id))"/><span t-field="pack_operation.product_uom_id" groups="product.group_uom" />
+                                        </td>
+                                        <td style="border: 1px solid black;" class="text-right"><span t-field="pack_operation.discount" /> <span t-field="pack_operation.product_uom_id" groups="product.group_uom" />
+                                        </td>
+                                        <td class="text-right"><span t-field="pack_operation.price_subtotal" /> <span t-field="pack_operation.product_uom_id" groups="product.group_uom" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row" name="total">
+                                    <div class="col-xs-6 pull-right">
+                                        <table class="table table-condensed">
+                                        <tr class="border-black">
+                                            <td><strong>Total Without Taxes</strong></td>
+                                            <td class="text-right">
+                                            <t t-if="o.amount_untaxed">
+                                            <span t-field="o.amount_untaxed" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                            </t>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Taxes</td>
+                                            <td class="text-right">
+                                            <t t-if="o.amount_tax">
+                                            <span t-field="o.amount_tax" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                            </t>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Transportation &amp; Installation Charges</td>
+                                            <td class="text-right">
+                                            <t t-if="o.amount_delivery">
+                                            <span t-field="o.amount_delivery" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                            </t>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-black">
+                                            <td><strong>Total</strong></td>
+                                            <td class="text-right">
+                                            <t t-if="o.amount_total">
+                                            <span t-field="o.amount_total" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                            </t>
+                                            </td>
+                                        </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            <br/>
+                            <br/>
+                            <p t-if="o.c_form == 'yes'">
+                                <strong>C Form is Applicable</strong>
+                            </p>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

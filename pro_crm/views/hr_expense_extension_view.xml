@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+<data>
+
+<!-- Quotation Form View -->    
+<record id="hr_expense_expense_form_view_extension" model="ir.ui.view">
+	<field name="name">hr.expense.expense.form</field>
+	<field name="model">hr.expense.expense</field>
+	<field name="inherit_id" ref="opencloud_hr_expense.hr_expense_expense_form_view"/>
+    <field name="arch" type="xml" >
+		<field name="untaxed_amount" position="after">
+			<field name="amount_advance"/>
+		</field>
+		<xpath expr="//sheet/group/group[1]" position="after">
+			<group>
+				<field name="zone" readonly="1"/>
+				<field name="advance_amount" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+			</group>
+		</xpath>
+	</field>
+</record>
+
+
+</data>
+</openerp>

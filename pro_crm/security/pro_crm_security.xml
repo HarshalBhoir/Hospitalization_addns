@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!--PRO CRM / ZSM Group-->
+
+    <record id="group_pro_crm_zsm" model="res.groups">
+        <field name="name">PRO CRM / ZSM</field>
+    </record>
+    
+    <!--PRO CRM / Dealer Manager Group-->
+    
+    <record id="group_pro_crm_dealer" model="res.groups">
+        <field name="name">PRO CRM / Dealer Manager</field>
+    </record>
+    
+    <!--PRO CRM / Marketing Group-->
+    
+    <record id="group_pro_crm_marketing" model="res.groups">
+        <field name="name">PRO CRM / Marketing</field>
+    </record>
+    
+    <!--PRO CRM / CEO Group-->
+    
+    <record id="group_pro_crm_ceo" model="res.groups">
+        <field name="name">PRO CRM / CEO</field>
+    </record>
+    
+    <!--PRO CRM / Petty Cash Group-->
+    
+    <record id="group_pro_crm_petty_cash" model="res.groups">
+        <field name="name">PRO CRM / Petty Cash</field>
+    </record>
+    
+    <!--Hidden Group-->
+    
+    <record id="group_pro_crm_hidden" model="res.groups">
+        <field name="name">PRO CRM / Hidden</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="comment">User group to hide all unused menus in the Matrix application.</field>
+    </record>
+    
+    <record model="ir.module.category" id="module_category_pro_crm">
+        <field name="name">Pro CRM</field>
+        <field name="sequence">0</field>
+    </record>
+    
+    <!--Matrix Admin Group-->
+    
+     <record id="pro_crm.group_pro_crm_admin" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="category_id" ref="pro_crm.module_category_pro_crm"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_system'))]"/>
+        <field name="comment">the Admin will have access to All data in the PRO CRM application.</field>
+    </record>
+    
+    <!--Record Rule for Dealer Manager-->
+    
+    <record model="ir.rule" id="crm_lead_dealer">
+        <field name="name">CRM lead - Dealer</field>
+        <field name="model_id" ref="model_crm_lead"/>
+        <field name="groups" eval="[(4, ref('group_pro_crm_dealer'))]"/>
+        <field name="domain_force">['|','|',('user_id','=',user.id),('user_id','=',False),('enquiry_type','=', 'dealer')]</field>
+    </record>
+    
+    <record model="ir.rule" id="crm_sale_order_dealer">
+        <field name="name">Sale order - Dealer</field>
+        <field name="model_id" ref="model_sale_order"/>
+        <field name="groups" eval="[(4, ref('group_pro_crm_dealer'))]"/>
+        <field name="domain_force">['|','|',('user_id','=',user.id),('user_id','=',False),('enquiry_type','=', 'dealer')]</field>
+    </record>
+
+    <record model="ir.rule" id="crm_res_partner_dealer">
+        <field name="name">Customers - Dealer</field>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="groups" eval="[(4, ref('group_pro_crm_dealer'))]"/>
+        <field name="domain_force">[('customer','=',True)]</field>
+    </record>
+
+    <record model="ir.rule" id="crm_demo_indent_dealer">
+        <field name="name">Demo Indent - Dealer</field>
+        <field name="model_id" ref="model_crm_indent"/>
+        <field name="groups" eval="[(4, ref('group_pro_crm_dealer'))]"/>
+        <field name="domain_force">['|','|',('deal_done_by','=',user.id),('deal_done_by','=',False),('enquiry_type','=', 'dealer')]</field>
+    </record>
+    
+    <record model="ir.rule" id="crm_stock_picking_dealer">
+        <field name="name">Stock Picking - Dealer</field>
+        <field name="model_id" ref="model_stock_picking"/>
+        <field name="groups" eval="[(4, ref('group_pro_crm_dealer'))]"/>
+        <field name="domain_force">['|','|',('deal_done_by','=',user.id),('deal_done_by','=',False),('enquiry_type','=', 'dealer')]</field>
+    </record>
+    
+    <record model="ir.rule" id="crm_account_invoice_dealer">
+        <field name="name">Account Invoice - Dealer</field>
+        <field name="model_id" ref="model_account_invoice"/>
+        <field name="groups" eval="[(4, ref('group_pro_crm_dealer'))]"/>
+        <field name="domain_force">['|','|',('user_id','=',user.id),('user_id','=',False),('enquiry_type','=', 'dealer')]</field>
+    </record>
+    
+    <!--Record Rule for CRM Lead-->
+
+    <record model="ir.rule" id="crm_lead_zsm">
+        <field name="name">CRM lead - ZSM</field>
+        <field name="model_id" ref="model_crm_lead"/>
+        <field name="groups" eval="[(4, ref('group_pro_crm_zsm'))]"/>
+        <field name="domain_force">['|','|',('user_id','=',user.id),('user_id','=',False),('manager_id','=',user.id)]</field>
+    </record>
+    
+    <record model="ir.rule" id="crm_lead_manager">
+        <field name="name">CRM lead - Manager</field>
+        <field name="model_id" ref="model_crm_lead"/>
+        <field name="groups" eval="[(4, ref('base.group_sale_manager'))]"/>
+        <field name="domain_force">[(1 ,'=', 1)]</field>
+    </record>
+    
+    <!--Record Rule for Sale Order-->
+    
+    <record model="ir.rule" id="crm_sale_order_zsm">
+        <field name="name">Sale order - ZSM</field>
+        <field name="model_id" ref="model_sale_order"/>
+        <field name="groups" eval="[(4, ref('group_pro_crm_zsm'))]"/>
+        <field name="domain_force">['|','|',('user_id','=',user.id),('user_id','=',False),('manager_id','=',user.id)]</field>
+    </record>
+    
+    <record model="ir.rule" id="crm_sale_order_user">
+        <field name="name">Sale order - User</field>
+        <field name="model_id" ref="model_sale_order"/>
+        <field name="groups" eval="[(4, ref('base.group_sale_salesman'))]"/>
+        <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+    </record>
+    
+    <record model="ir.rule" id="sale_order_manager">
+        <field name="name">Sale Order- Manager</field>
+        <field name="model_id" ref="model_sale_order"/>
+        <field name="groups" eval="[(4, ref('base.group_sale_manager'))]"/>
+        <field name="domain_force">[(1 ,'=', 1)]</field>
+    </record>
+    
+    <!--Record Rule for Stock Picking-->
+    
+    <record model="ir.rule" id="stock_picking_zsm">
+        <field name="name">Stock Picking - ZSM</field>
+        <field name="model_id" ref="model_stock_picking"/>
+        <field name="groups" eval="[(4, ref('stock.group_stock_user'))]"/>
+        <field name="domain_force">['|','|','|',('deal_done_by','=',user.id),('deal_done_by','=',False),('manager_id','=',user.id),('deal_done_by.partner_id.manager_id','=',user.id)]</field>
+    </record>
+    
+    <record model="ir.rule" id="stock_picking_manager">
+        <field name="name">Stock Picking - Manager</field>
+        <field name="model_id" ref="model_stock_picking"/>
+        <field name="groups" eval="[(4, ref('stock.group_stock_manager'))]"/>
+        <field name="domain_force">[(1 ,'=', 1)]</field>
+    </record>
+    
+    <record model="ir.rule" id="stock_picking_manager">
+        <field name="name">Stock Picking - CEO</field>
+        <field name="model_id" ref="model_stock_picking"/>
+        <field name="groups" eval="[(4, ref('pro_crm.group_pro_crm_ceo'))]"/>
+        <field name="domain_force">[(1 ,'=', 1)]</field>
+    </record>
+    
+    <!--Record Rule for res partner-->
+    
+    <record model="ir.rule" id="res_partner_users">
+        <field name="name">res partner - users</field>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="groups" eval="[(4, ref('pro_crm.group_pro_crm_admin'))]"/>
+        <field name="domain_force">[('id','not in', (1,2,3))]</field>
+    </record>
+    
+    <record model="ir.rule" id="res_partner_admin">
+        <field name="name">res partner - admin</field>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="groups" eval="[(4, ref('pro_crm.group_pro_crm_hidden'))]"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+    </record>
+    
+    
+    <!--Record Rule for Demo Indent-->
+    
+    <record model="ir.rule" id="crm_demo_indent_user">
+        <field name="name">Demo Indent - User</field>
+        <field name="model_id" ref="model_crm_indent"/>
+        <field name="groups" eval="[(4, ref('base.group_sale_salesman'))]"/>
+        <field name="domain_force">['|',('deal_done_by','=',user.id),('deal_done_by','=',False)]</field>
+    </record>
+    
+    <record model="ir.rule" id="crm_demo_indent_zsm">
+        <field name="name">Demo Indent - ZSM</field>
+        <field name="model_id" ref="model_crm_indent"/>
+        <field name="groups" eval="[(4, ref('group_pro_crm_zsm'))]"/>
+        <field name="domain_force">['|','|',('deal_done_by','=',user.id),('deal_done_by','=',False),('manager_id','=',user.id)]</field>
+    </record>
+    
+    <record model="ir.rule" id="crm_demo_indent_manager">
+        <field name="name">Demo Indent - Manager</field>
+        <field name="model_id" ref="model_crm_indent"/>
+        <field name="groups" eval="[(4, ref('base.group_sale_manager'))]"/>
+        <field name="domain_force">[(1 ,'=', 1)]</field>
+    </record>
+    
+    <!--Record Rule for Sale Order Line-->
+    
+    <record model="ir.rule" id="crm_sale_order_line_user">
+        <field name="name">Sale Order Line - user</field>
+        <field name="model_id" ref="sale.model_sale_order_line"/>
+        <field name="groups" eval="[(4, ref('base.group_sale_salesman'))]"/>
+        <field name="domain_force">[(1 ,'=', 1)]</field>
+    </record>
+    
+    <record model="ir.rule" id="crm_sale_order_line_zsm">
+        <field name="name">Sale Order Line - ZSM</field>
+        <field name="model_id" ref="sale.model_sale_order_line"/>
+        <field name="groups" eval="[(4, ref('group_pro_crm_zsm'))]"/>
+        <field name="domain_force">[(1 ,'=', 1)]</field>
+    </record>
+    
+    <record model="ir.rule" id="sale_order_line_manager">
+        <field name="name">Sale Order Line- Manager</field>
+        <field name="model_id" ref="sale.model_sale_order_line"/>
+        <field name="groups" eval="[(4, ref('base.group_sale_manager'))]"/>
+        <field name="domain_force">[(1 ,'=', 1)]</field>
+    </record>
+    
+    <!--Record Rule for Customers-->
+    
+    <!--All Customers of Zone-->
+    <record model="ir.rule" id="crm_res_partner_user">
+        <field name="name">Customers - User</field>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="groups" eval="[(4, ref('base.group_sale_salesman'))]"/>
+        <field name="domain_force">['|','|',('user_id','=',user.id),('user_id','=',False),('user_id','=',user.partner_id.manager_id.id)]</field>
+    </record>
+    
+    <!--All Customers of Zone and All dealer-->
+    <record model="ir.rule" id="crm_res_partner_zsm">
+        <field name="name">Customers - ZSM</field>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="groups" eval="[(4, ref('group_pro_crm_zsm'),ref('pro_crm.group_pro_crm_dealer'))]"/>
+        <field name="domain_force">['|','|',('user_id','=',user.id),'&amp;',('manager_id','=',user.id),('customer','=',True),'&amp;',('dealer','=',True),(1,'=',1)]</field>
+    </record>
+    
+    <!--Record Rule for Account Invoice-->
+    
+    <record model="ir.rule" id="crm_account_invoice_zsm">
+        <field name="name">Account Invoice - ZSM</field>
+        <field name="model_id" ref="model_account_invoice"/>
+        <field name="groups" eval="[(4, ref('group_pro_crm_zsm'))]"/>
+        <!--<field name="implied_ids" eval="[(4, ref('base.group_sale_salesman'))]"/>-->
+        <field name="domain_force">['|','|',('user_id','=',user.id),('user_id','=',False),('manager_id','=',user.id)]</field>
+    </record>
+
+    <record model="ir.rule" id="crm_account_invoice_manager">
+        <field name="name">Account Invoice - Manager</field>
+        <field name="model_id" ref="model_account_invoice"/>
+        <field name="groups" eval="[(4, ref('base.group_sale_manager'))]"/>
+        <!--<field name="implied_ids" eval="[(4, ref('base.group_sale_salesman'))]"/>-->
+        <field name="domain_force">[(1 ,'=', 1)]</field>
+    </record>
+    
+    <!--Record Rule for Sale Analysis-->
+    
+    <record model="ir.rule" id="sale_analysis_zsm">
+        <field name="name">Sale Analysis - ZSM</field>
+        <field name="model_id" ref="model_sale_analysis"/>
+        <field name="groups" eval="[(4, ref('group_pro_crm_zsm'))]"/>
+        <field name="domain_force">[('zsm','=',user.id)]</field>
+    </record>
+    
+    <record model="ir.rule" id="sale_analysis_manager">
+        <field name="name">Sale Analysis - Manager</field>
+        <field name="model_id" ref="model_sale_analysis"/>
+        <field name="groups" eval="[(4, ref('pro_crm.group_pro_crm_admin'),ref('pro_crm.group_pro_crm_ceo'))]"/>
+        <field name="domain_force">[(1 ,'=', 1)]</field>
+    </record>
+</odoo>

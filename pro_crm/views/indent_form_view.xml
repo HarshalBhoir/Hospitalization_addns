@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+<data>
+
+
+
+
+<!-- Demo Indent Form View -->    
+<record id="crm_indent_form" model="ir.ui.view">
+    <field name="name">view.crm_indent.form</field>
+    <field name="model">crm.indent</field>
+    <field name="arch" type="xml">
+
+        <form string="Demo Indent" create="0">
+					<style>
+.o_datepicker{
+		width: 37%;
+}
+	
+</style>
+            <header>
+                <button name="send_approval" string="Send For Approval" type="object" class="oe_highlight" groups="base.group_sale_salesman" icon="fa-check" attrs="{'invisible':[('state','not in',['draft'])]}"/>
+                <button name="%(pro_crm.demo_cancel_lost_action)d" string="Cancel" type="action" class="oe_highlight" context="{'default_demo_id': active_id, 'default_status': state}" icon="fa-close" groups="base.group_sale_salesman" attrs="{'invisible':[('state','not in',['draft'])]}"/>
+                <button name="zsm_approval" string="Approve" type="object" class="oe_highlight" icon="fa-check" groups="pro_crm.group_pro_crm_zsm" attrs="{'invisible':[('state','not in',['zsmaprvl'])]}"/>
+                <button name="%(pro_crm.demo_cancel_lost_action)d" string="Reject" type="action" class="oe_highlight" icon="fa-close" groups="pro_crm.group_pro_crm_zsm" context="{'default_demo_id': active_id, 'default_status': state}" attrs="{'invisible':[('state','not in',['zsmaprvl'])]}"/>
+                <button name="log_approval" string="Approve" type="object" class="oe_highlight" icon="fa-check" groups="stock.group_stock_manager" attrs="{'invisible':[('state','not in',['logaprvl'])]}"/>
+                <button name="%(pro_crm.demo_cancel_lost_action)d" string="Reject" type="action" class="oe_highlight" icon="fa-close" groups="stock.group_stock_manager" context="{'default_demo_id': active_id, 'default_status': state}" attrs="{'invisible':[('state','not in',['logaprvl'])]}"/>
+                <button name="ceo_approval" string="Approve" type="object" class="oe_highlight" icon="fa-check" groups="pro_crm.group_pro_crm_ceo" attrs="{'invisible':[('state','not in',['ceoaprvl'])]}"/>
+                <button name="%(pro_crm.demo_cancel_lost_action)d" string="Reject" type="action" class="oe_highlight" icon="fa-close" groups="pro_crm.group_pro_crm_ceo" context="{'default_demo_id': active_id, 'default_status': state}" attrs="{'invisible':[('state','not in',['ceoaprvl'])]}"/>
+                <field name="state" widget="statusbar" statusbar_visible="draft,zsmaprvl,logaprvl,ceoaprvl,done" readonly="1"/>
+            </header>
+            <sheet>
+            <h1><center>Demo Indent</center></h1><br/>
+            <group col="4" colspan="2">
+                <field name="ind_no" readonly="1"/>
+				<!--<field name="demo_indent_id"/>-->
+                <field name="date" attrs="{'readonly':[('state','in',['done'])]}"/>
+                <!--<field name="from_date"/>-->
+                <field name="deal_done_by" options="{'no_create': True, 'no_create_edit':True}" attrs="{'readonly':[('state','in',['done'])]}"/>
+                <field name="enquiry" options="{'no_create': True, 'no_create_edit':True}" attrs="{'readonly':[('state','in',['done'])]}"/>
+				<field name="existing_customer" widget="radio" options="{'horizontal': true}" invisible="1"/>
+            </group>
+            <group col="4" colspan="2" string="Customer Information">
+				<field name="contact_name" attrs="{'invisible': [('existing_customer', '=', 'yes')],'readonly':[('state','in',['done'])]}"/>
+                <field name="cust_name" domain="[('customer','=',True)]" attrs="{'invisible': [('existing_customer', '!=', 'yes')]}"/>
+                <label for="street" string="Address"/>
+                <div class="o_address_format">
+                    <div class="oe_edit_only">
+                    </div>
+                    <field name="street" placeholder="Street..." class="o_address_street" attrs="{'readonly':[('state','in',['done'])]}"/>
+                    <field name="street2" placeholder="Street 2..." class="o_address_street" attrs="{'readonly':[('state','in',['done'])]}"/>
+                    <field name="city" placeholder="City" class="o_address_city" attrs="{'readonly':[('state','in',['done'])]}"/>
+                    <field name="state_id" class="o_address_state" placeholder="State" options="{'no_create': True, 'no_create_edit':True, 'no_open': True}" attrs="{'readonly':[('state','in',['done'])]}"/>
+                    <field name="zip1" placeholder="ZIP" class="o_address_zip" attrs="{'readonly':[('state','in',['done'])]}"/>
+                    <field name="country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}' attrs="{'readonly':[('state','in',['done'])]}"/>
+					<field name="zone" placeholder="Zone" attrs="{'readonly':[('state','in',['done'])]}" required="1"/>
+
+                </div>
+				<field name="hospital_name" attrs="{'readonly':[('state','in',['done'])]}"/>
+                <field name="contact_no" attrs="{'readonly':[('state','in',['done'])]}"/>
+                <field name="email" attrs="{'readonly':[('state','in',['done'])]}"/>
+                <field name="cust_faculty" options='{"no_open": True, "no_create": True}' attrs="{'readonly':[('state','in',['done'])]}"/>
+                <field name="purpose" attrs="{'readonly':[('state','in',['done'])]}"/>
+				<field name="enquiry_type" invisible="1"/>
+            </group>
+			<group col="4" colspan="2" string="Dealer Information"  attrs="{'invisible': [('enquiry_type', '!=', 'dealer')]}">>
+				<field name="dealer_name" domain="[('dealer','=',True)]"  attrs="{'readonly':[('state','in',['done'])]}"/>
+                <label for="dealer_street" string="Address"/>
+					<div class="o_address_format">
+						<div class="oe_edit_only">
+						</div>
+						<field name="dealer_street" placeholder="Street..." class="o_address_street"  attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="dealer_street2" placeholder="Street 2..." class="o_address_street"  attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="dealer_city" placeholder="City" class="o_address_city"  attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="dealer_state_id" class="o_address_state" placeholder="State"  attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="dealer_zip1" placeholder="ZIP" class="o_address_zip"  attrs="{'readonly':[('state','in',['done'])]}"/>
+						<field name="dealer_country_id" placeholder="Country" class="o_address_country"  attrs="{'readonly':[('state','in',['done'])]}"/>
+					</div>
+					<field name="dealer_pan" attrs="{'readonly':[('state','in',['done'])]}"/>
+					<field name="dealer_tin" attrs="{'readonly':[('state','in',['done'])]}"/>
+					<field name="dealer_phone" attrs="{'readonly':[('state','in',['done'])]}"/>
+					<field name="dealer_mobile" attrs="{'readonly':[('state','in',['done'])]}"/>
+					<field name="dealer_email" attrs="{'readonly':[('state','in',['done'])]}"/>
+            </group>
+			<group col="4" colspan="2" string="Dispatch Details">
+				<field name="expected_date" attrs="{'readonly':[('state','not in',['draft','zsmaprvl'])] ,'required':[('state','in',['draft','zsmaprvl'])] }"/>
+				<field name="approx_date" attrs="{'readonly':[('state','not in',['logaprvl'])] ,'required':[('state','in',['logaprvl'])]}"/>
+				<label for="delivery_street" string="Delivery Address"/>
+					<div class="o_address_format">
+						<div class="oe_edit_only">
+						</div>
+						<field name="delivery_street" placeholder="Street..." class="o_address_street"/>
+						<field name="delivery_street2" placeholder="Street 2..." class="o_address_street"/>
+						<field name="delivery_city" placeholder="City" class="o_address_city"/>
+						<field name="delivery_state_id" class="o_address_state" placeholder="State"/>
+						<field name="delivery_zip1" placeholder="ZIP" class="o_address_zip"/>
+						<field name="delivery_country_id" placeholder="Country" class="o_address_country"/>
+					</div>
+					<field name="dispatch" attrs="{'readonly':[('state','not in',['draft','zsmaprvl'])] ,'required':[('state','in',['draft','zsmaprvl'])] }"/>
+			</group>
+			<group col="4" colspan="2" string="Payment Details" attrs="{'invisible': [('purpose', '!=', 'demo_on_approval')]}">
+				<field name="payment_term"  attrs="{'invisible': [('purpose', '!=', 'demo_on_approval')]}"/>
+				<field name="total_deal_value" attrs="{'invisible':[('purpose','!=', 'demo_on_approval')]}"/>
+			</group>
+			<!--<group col="4" colspan="2" string="Transport Details">
+				<field name="transporter_name"  attrs="{'readonly':[('state','not in',['logaprvl'])] ,'required':[('state','in',['logaprvl'])] }"/>
+				<field name="lr_no"  attrs="{'readonly':[('state','not in',['logaprvl'])],'required':[('state','in',['logaprvl'])] }"/>
+				<field name="dc_no"  attrs="{'readonly':[('state','not in',['logaprvl'])],'required':[('state','in',['logaprvl'])] }"/>
+			</group>-->
+			<group style='color:red'>
+				<field name="cancellation_reason" readonly="1"  attrs="{'invisible':[('state','not in',['cancel'])]}"/>
+				<field name="rejection_reason" readonly="1" attrs="{'invisible':[('state','not in',['zsmrejctd', 'logrejctd'])]}"/>
+			</group>
+            <group col="4" colspan="2" string="Machine Status" attrs="{'invisible':[('state','not in',['done'])]}">
+				<field name="machine_status" attrs="{'invisible':[('state','not in',['done'])], 'required':[('state','in',['done'])]}"/>
+				<field name="machine_date" attrs="{'invisible':[('machine_status','not in',['returned', 'sold'])], 'required':[('machine_status','in',['returned', 'sold'])]}"/>
+                <field name="machine_details" attrs="{'invisible':[('machine_status','not in',['returned', 'sold'])], 'required':[('machine_status','in',['returned', 'sold'])]}"/>
+            </group>
+            <notebook colspan="4">
+			<page string="Product Details" autofocus="autofocus">
+				<field name="product_details_one2many">
+					<tree create="0">
+						<field name="model" readonly="1"/>
+						<field name="description" readonly="1"/>
+						<field name="sr_no" readonly="1"/>
+						<!--<field name="accessories" options='{"no_open": True, "no_create": True}'/>-->
+						<!--<field name="instrument" options='{"no_open": True, "no_create": True}'/>-->
+						<field name="qty" readonly="1"/>
+						<!--<field name="prod_cost"/>-->
+						<field name="product_type"/>
+					</tree>
+				</field>
+			</page>
+            <page name='comment' string="Remarks">
+                <field name="comment" placeholder="Remarks..."/>
+            </page>
+            </notebook>
+            </sheet>
+            <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers" />
+                <field name="message_ids" widget="mail_thread" />
+            </div>
+        </form>
+    </field>
+</record>
+
+
+<record model="ir.ui.view"  id="crm_indent_form_extension">
+    <field name="name">view.crm_indent_form_extension.form</field>
+    <field name="model">crm.indent</field>
+    <field name="inherit_id" ref="pro_crm.crm_indent_form"/>
+    <field name="groups_id" eval="[(6, 0, [ref('pro_crm.group_pro_crm_zsm'), ref('pro_crm.group_pro_crm_ceo'), ref('base.group_sale_salesman') ])]"/>
+    <field name="arch" type="xml">
+        <field name="approx_date" position="attributes">
+            <attribute name="readonly">1</attribute>
+        </field>
+    </field>
+</record>
+
+<!--<record model="ir.ui.view"  id="crm_indent_product_form_extension">
+    <field name="name">view.crm_indent_product_form_extension.form</field>
+    <field name="model">product.details</field>
+    <field name="inherit_id" ref="pro_crm.crm_indent_form"/>
+    <field name="groups_id" eval="[(6, 0, [ref('pro_crm.group_pro_crm_zsm'), ref('pro_crm.group_pro_crm_ceo'), ref('base.group_sale_salesman') ])]"/>
+    <field name="arch" type="xml">
+        <field name="sr_no" position="attributes">
+            <attribute name="readonly">1</attribute>
+        </field>
+    </field>
+</record>-->
+
+<!-- Demo Indent Tree View -->
+<record id="crm_demo_indent_tree" model="ir.ui.view">
+    <field name="name">view.crm_demo_indent.tree</field>
+    <field name="model">crm.indent</field>
+    <field name="priority">1</field>
+    <field name="arch" type="xml">
+        <tree string="Demo Indent" create="0">
+			<field name="create_date" string="Date"/>
+			<field name="ind_no"/>
+            <field name="cust_name"/>
+            <field name="deal_done_by"/>
+            <field name="enquiry"/>
+			<field name="zone"/>
+            <field name="date"/>
+			<field name="state"/>
+			<field name="machine_status"/>
+        </tree>
+    </field>
+</record>
+
+<!-- Demo Indent Search View -->
+<record id="crm_demo_indent_filter" model="ir.ui.view">
+	<field name="name">crm.crm_demo_indent.select</field>
+	<field name="model">crm.indent</field>
+	<field name="arch" type="xml">
+        <search>
+			<field name="ind_no"/>
+            <field name="cust_name"/>
+            <field name="enquiry"/>
+			<field name="zone"/>
+			<field name="state"/>
+			<filter string="Machine out for demo" domain="[('machine_status', '=', ['out'])]"/>
+			<filter string="Machine Sold" domain="[('machine_status', '=', ['sold'])]"/>
+			<filter string="Machine Returned" domain="[('machine_status', '=', ['returned'])]"/>
+			<separator/>
+			<filter string="Draft" domain="[('state', '=', ['draft'])]"/>
+			<filter string="Done" domain="[('state', '=', ['done'])]"/>
+            <group expand="0" string="Group By">
+                <filter string="Deal done by" name="groupby_deal_done" domain="[]" context="{'group_by':'deal_done_by'}"/>
+                <filter string="Enquiry Through" name="groupby_enquiry" domain="[]" context="{'group_by':'enquiry'}"/>
+				<filter string="Machine Status" name="groupby_machine_status" domain="[]" context="{'group_by':'machine_status'}"/>
+				<filter string="State" name="groupby_states" domain="[]" context="{'group_by':'state'}"/>
+				<filter string="Zone" name="groupby_zone" domain="[]" context="{'group_by':'zone'}"/>
+            </group>
+        </search>
+	</field>
+</record>
+
+<!-- Sale Indent Form View -->  
+<!-- <record id="sale_indent_form" model="ir.ui.view">
+    <field name="name">view.sale_indent.form</field>
+    <field name="model">sale.indent</field>
+    <field name="arch" type="xml">
+        <form string="Indent Form">
+            <sheet>
+            <label for="name" class="oe_edit_only oe_horizontal_separator oe_clear" style="font-size: 18px"/>
+            <h1><field name="name" required="1"/></h1>
+			
+			 Sale Indent - Dealer  
+            <group attrs="{'invisible': [('name', '!=', 'Dealer')]}">
+            <center class="oe_edit_only oe_horizontal_separator oe_clear" style="font-size: 22px">Sale Indent - Dealer</center>
+            <group col="4" colspan="2">
+                <field name="dealer_ind_no" readonly="1"/>
+                <field name="dealer_date"/>
+                <field name="dealer_from_date"/>
+                <field name="dealer_deal_done_by"/>
+                <field name="dealer_enquiry"/>
+            </group>
+            <group col="4" colspan="2" string="Dealer Information">
+                <field name="dealer_name"/>
+                <label for="dealer_street" string="Address"/>
+                <div class="o_address_format">
+                    <div class="oe_edit_only">
+                    </div>
+                    <field name="dealer_street" placeholder="Street..." class="o_address_street"/>
+                    <field name="dealer_street2" placeholder="Street 2..." class="o_address_street"/>
+                    <field name="dealer_city" placeholder="City" class="o_address_city"/>
+                    <field name="dealer_state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                    <field name="dealer_zip1" placeholder="ZIP" class="o_address_zip"/>
+                    <field name="dealer_country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}' attrs="{'required': [('name', '=', 'Dealer')]}"/>
+                </div>
+                <field name="dealer_pan"/>
+                <field name="dealer_tin"/>
+                <field name="dealer_contact_no"/>
+                <field name="dealer_email"/>
+            </group>
+            <group col="4" colspan="2" string="Customer Information">
+                <field name="dealer_cust_name"/>
+                <label for="dealer_cust_street" string="Address"/>
+                <div class="o_address_format">
+                    <div class="oe_edit_only">
+                    </div>
+                    <field name="dealer_cust_street" placeholder="Street..." class="o_address_street"/>
+                    <field name="dealer_cust_street2" placeholder="Street 2..." class="o_address_street"/>
+                    <field name="dealer_cust_city" placeholder="City" class="o_address_city"/>
+                    <field name="dealer_cust_state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                    <field name="dealer_cust_zip1" placeholder="ZIP" class="o_address_zip"/>
+                    <field name="dealer_cust_country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}' attrs="{'required': [('name', '=', 'Dealer')]}"/>
+                </div>
+                <field name="dealer_cust_tin"/>
+                <field name="dealer_cust_contact_no"/>
+                <field name="dealer_cust_email"/>
+                <field name="dealer_cust_faculty"/>
+                <field name="dealer_cust_warranty"/>
+            </group>
+            <group col="4" colspan="2" string="Product Details">
+                <field name="dealer_model"/>
+                <field name="dealer_qty"/>
+                <field name="dealer_accessories"/>
+                <field name="dealer_instrument"/>
+            </group>
+            <group col="4" colspan="2">
+                <field name="dealer_requirement"/>
+                <field name="dealer_spl_instructions"/>
+            </group>
+            <notebook colspan="4">
+            <page name='dealer_comment' string="Remarks" autofocus="autofocus">
+                <field name="dealer_comment" placeholder="Remarks..."/>
+            </page>
+            </notebook>
+            </group>
+            
+             Sale Indent - Direct  
+            <group attrs="{'invisible': [('name', '!=', 'Direct')]}">
+            <center class="oe_edit_only oe_horizontal_separator oe_clear" style="font-size: 22px">Sale Indent - Direct</center>
+            <group col="4" colspan="2">
+                <field name="direct_ind_no" readonly="1"/>
+                <field name="direct_date"/>
+                <field name="direct_from_date"/>
+                <field name="direct_deal_done_by"/>
+                <field name="direct_enquiry"/>
+            </group>
+            <group col="4" colspan="2" string="Customer Information">
+                <field name="direct_cust_name"/>
+                <field name="direct_cust_hosp_name"/>
+                <label for="direct_cust_street" string="Address"/>
+                <div class="o_address_format">
+                    <div class="oe_edit_only">
+                    </div>
+                    <field name="direct_cust_street" placeholder="Street..." class="o_address_street"/>
+                    <field name="direct_cust_street2" placeholder="Street 2..." class="o_address_street"/>
+                    <field name="direct_cust_city" placeholder="City" class="o_address_city"/>
+                    <field name="direct_cust_state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                    <field name="direct_cust_zip1" placeholder="ZIP" class="o_address_zip"/>
+                    <field name="direct_cust_country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}' attrs="{'required': [('name', '=', 'Direct')]}"/>
+                </div>
+                <field name="direct_cust_pan"/>
+                <field name="direct_cust_tin"/>
+                <field name="direct_cust_contact_no"/>
+                <field name="direct_cust_email"/>
+                <field name="direct_cust_faculty"/>
+                <field name="direct_cust_warranty"/>
+            </group>
+            <group col="4" colspan="2" string="Product Details">
+                <field name="direct_model"/>
+                <field name="direct_qty"/>
+                <field name="direct_accessories"/>
+                <field name="direct_instrument"/>
+            </group>
+            <group col="4" colspan="2">
+                <field name="direct_requirement"/>
+                <field name="direct_spl_instructions"/>
+            </group>
+            <notebook colspan="4">
+            <page name='direct_comment' string="Remarks" autofocus="autofocus">
+                <field name="direct_comment" placeholder="Remarks..."/>
+            </page>
+            </notebook>
+            </group>
+            
+             Sale Indent - Tender  
+            <group attrs="{'invisible': [('name', '!=', 'Tender')]}">
+            <center class="oe_edit_only oe_horizontal_separator oe_clear" style="font-size: 22px">Sale Indent - Tender</center>
+            <group col="4" colspan="2">
+                <field name="tender_ind_no" readonly="1"/>
+                <field name="tender_date"/>
+                <field name="tender_from_date"/>
+                <field name="tender_deal_done_by"/>
+                <field name="tender_enquiry"/>
+            </group>
+            <group col="4" colspan="2" string="Tender Information">
+                <field name="tender_name"/>
+                <field name="tender_no"/>
+                <field name="tender_location"/>
+                <field name="tender_authority"/>
+                <field name="tender_quote_by"/>
+                <field name="tender_comp_name"/>
+                <field name="tender_dealer_name"/>
+            </group>
+            <group col="4" colspan="2" string="Contact Person Information">
+                <field name="tender_contact_name"/>
+                <field name="tender_email"/>
+                <field name="tender_designation"/>
+                <field name="tender_website"/>
+                <field name="tender_mobile_no"/>
+                <field name="tender_landline_no"/>
+                <field name="tender_emd"/>
+                <field name="tender_proof"/>
+            </group>
+            <group col="4" colspan="2" string="Product Details">
+                <field name="tender_model"/>
+                <field name="tender_qty"/>
+                <field name="tender_accessories"/>
+                <field name="tender_standard"/>
+                <field name="tender_instrument"/>
+                <field name="tender_requirement"/>
+                <field name="tender_spl_instructions"/>
+            </group>
+            <group col="4" colspan="2">
+                <field name="tender_purchase_order"/>
+                <field name="tender_att_documents"/>
+                <field name="tender_warranty"/>
+            </group>
+            <notebook colspan="4">
+            <page name='tender_comment' string="Remarks" autofocus="autofocus">
+                <field name="tender_comment" placeholder="Remarks..."/>
+            </page>
+            </notebook>
+            </group>
+            </sheet>
+        </form>
+    </field>
+</record> --> 
+
+<!-- Sale Indent Tree View -->  
+<!--<record id="crm_sale_indent_tree" model="ir.ui.view">
+    <field name="name">view.sale_indent.tree</field>
+    <field name="model">sale.indent</field>
+    <field name="priority">1</field>
+    <field name="arch" type="xml">
+        <tree string="Sale Indent" attrs="{'invisible': [('name', '!=', 'Dealer')]}">
+            <field name="name"/>
+            <field name="dealer_deal_done_by"/>
+            <field name="dealer_enquiry"/>
+            <field name="dealer_cust_name"/>
+            <field name="dealer_model"/>
+        </tree>
+    </field>
+</record>-->
+
+<record id="action_indent_form" model="ir.actions.act_window">
+    <field name="name">Demo Indent</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">crm.indent</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<!--<record id="action_sale_indent_form" model="ir.actions.act_window">
+    <field name="name">Sale Indent</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">sale.indent</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+</record>-->
+
+
+</data>
+</openerp>
